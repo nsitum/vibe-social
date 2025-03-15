@@ -5,18 +5,44 @@ const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
 };
 
-const handleRegister = function (data) {
-  const user = {
-    username: data[0],
-    email: data[1],
-    password: data[2],
-  };
-  model.createNewUser(user);
+const loadHomePage = function () {
+  loginRegisterView.hideForm();
+};
+
+const handleRegister = async function (data) {
+  try {
+    if (data.password !== data.confirmPassword)
+      throw new Error("Lozinke se ne podudaraju!");
+    const user = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+    await model.createNewUser(user);
+    alert("Uspješno ste kreirali račun!");
+    loadHomePage();
+  } catch (err) {
+    loginRegisterView.renderError(err.message);
+  }
+};
+
+const handleLogin = async function (data) {
+  try {
+    const users = await model.getUsers();
+    users.forEach((user) => {
+      console.log(data, user);
+      if (user.user === data.user && user.password === data.password)
+        alert("Logging you in...");
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const init = function () {
   loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
   loginRegisterView.addHandlerRegister(handleRegister);
+  loginRegisterView.addHandlerLogin(handleLogin);
 };
 
 init();

@@ -80,3 +80,10 @@ Medium: 11px
 .hidden {
   display: none;
 }
+
+.error-message {
+  font-size: 2rem;
+  color: red;
+  font-weight: 700;
+  margin-top: 2rem;
+}

@@ -25,12 +25,44 @@ class LoginRegisterView extends View {
   addHandlerRegister(handler) {
     this._formRegister.addEventListener("submit", function (e) {
       e.preventDefault();
-      const data = Array.from(this.querySelectorAll("input")).map(
+      const inputs = Array.from(this.querySelectorAll("input")).map(
         (input) => input.value
       );
+      const data = {
+        username: inputs[0],
+        email: inputs[1],
+        password: inputs[2],
+        confirmPassword: inputs[3],
+      };
       handler(data);
       this.querySelectorAll("input").forEach((input) => (input.value = ""));
+      this.querySelector("input").focus();
     });
+  }
+
+  renderError(message = "Nešto je pošlo po zlu") {
+    const html = `<p class="error-message">${message}</p>`;
+    this._parentElement.insertAdjacentHTML("beforeend", html);
+  }
+
+  addHandlerLogin(handler) {
+    this._formLogin.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const inputs = Array.from(this.querySelectorAll("input")).map(
+        (input) => input.value
+      );
+      const data = {
+        username: inputs[0],
+        password: inputs[1],
+      };
+      handler(data);
+      this.querySelectorAll("input").forEach((input) => (input.value = ""));
+      this.querySelector("input").focus();
+    });
+  }
+
+  hideForm() {
+    this._parentElement.classList.add("hidden");
   }
 }
 
