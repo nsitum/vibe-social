@@ -4,16 +4,59 @@
   box-sizing: border-box;
 }
 
+:root {
+  --primary-bg-color: #121212:
+  --secondary-bg-color: #333;
+  --primary-color: #4a90e2;
+}
+
+html {
+  font-size: 62.5%;
+}
+
 body {
   display: flex;
   font-family: "Roboto", sans-serif;
   justify-content: center;
   align-items: center;
   height: 100dvh;
-  background-color: #000;
+  background-color: #121212;
 }
 
-#app {
+/* LOGIN/REGISTER */
+
+.login-register-container {
   color: #fff;
   text-align: center;
+  background-color: #333;
+  padding: 3rem 4rem;
+  border-radius: 0.5rem;
+}
+
+.form-login-register {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input {
+  padding: 1.2rem 2.4rem;
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.no-account {
+  text-align: right;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.no-account a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
 }

@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/general.css" />
+    <link rel="stylesheet" href="src/responsive.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,9 +15,52 @@
     <title>Vibe</title>
   </head>
   <body>
-    <div id="app">
-      <h1>Dobrodošli na društvenu mrežu Vibe!</h1>
+    <div class="login-register-container">
+      <h2 class="secondary-heading">Dobrodošao u Vibe!</h2>
+      <h3 class="tertiary-heading">Prijavi se</h3>
+      <div class="login-input">
+        <form class="form-login-register form-login">
+          <input
+            class="input username-input"
+            type="text"
+            placeholder="Korisničko ime"
+          />
+          <input
+            class="input password-input"
+            type="password"
+            placeholder="Lozinka"
+          />
+          <p class="no-account">
+            Nemaš račun?
+            <a class="no-account-register" href="#">Registriraj se.</a>
+          </p>
+          <button class="btn login-btn">Prijavi se</button>
+        </form>
+        <form class="hidden form-login-register form-register">
+          <input
+            class="input username-input"
+            type="text"
+            placeholder="Korisničko ime"
+          />
+          <input class="input email-input" type="email" placeholder="E-mail" />
+          <input
+            class="input password-input"
+            type="password"
+            placeholder="Lozinka"
+          />
+          <input
+            class="input password-input"
+            type="password"
+            placeholder="Ponovi lozinku"
+          />
+          <p class="no-account">
+            Već imaš račun?
+            <a class="no-account-login" href="#">Prijavi se.</a>
+          </p>
+          <button class="btn login-btn">Registriraj se</button>
+        </form>
+      </div>
     </div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/js/controller.js"></script>
   </body>
 </html>
