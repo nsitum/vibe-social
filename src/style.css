@@ -6,7 +6,13 @@
 
 body {
   display: flex;
+  font-family: "Roboto", sans-serif;
   justify-content: center;
   align-items: center;
   height: 100dvh;
+  background-color: #000;
+}
+
+#app {
+  color: #fff;
 }
