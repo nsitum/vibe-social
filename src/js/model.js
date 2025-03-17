@@ -5,13 +5,22 @@ export const state = {
   id: "",
   username: "",
   email: "",
+  loggedIn: false,
 };
 
 const setState = function (currentUser) {
   state.id = currentUser.id;
   state.username = currentUser.username;
   state.email = currentUser.email;
+  state.loggedIn = true;
   localStorage.setItem("loggedInUser", JSON.stringify({ id: currentUser.id }));
+};
+
+export const clearState = function () {
+  state.id = "";
+  state.username = "";
+  state.email = "";
+  state.loggedIn = false;
 };
 
 export const createNewUser = async function (user) {
@@ -45,6 +54,8 @@ const isLoggedIn = function () {
 export const checkLoggedIn = async function () {
   const loggedUser = isLoggedIn();
   if (!loggedUser) return;
+  alert("aaa");
+
   const currentUser = await getUser(API_URL, loggedUser.id);
   setState(currentUser);
   return currentUser;

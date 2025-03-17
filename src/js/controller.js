@@ -49,6 +49,7 @@ const handleLogin = async function (data) {
 const handleAlreadyLoggedIn = async function () {
   try {
     const user = await model.checkLoggedIn();
+    if (!user) return;
     model.loginUser(user);
     homePageView.render(model.state);
     loadHomePage();
@@ -57,13 +58,19 @@ const handleAlreadyLoggedIn = async function () {
   }
 };
 
+const handleLogout = function () {
+  homePageView.hideHomePage();
+  localStorage.clear();
+  model.clearState();
+  location.reload();
+};
+
 const init = async function () {
   await handleAlreadyLoggedIn();
   loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
   loginRegisterView.addHandlerRegister(handleRegister);
   loginRegisterView.addHandlerLogin(handleLogin);
-  loginRegisterView.addHandlerResizeInput();
-  homePageView.addHandlerLogout();
+  homePageView.addHandlerLogout(handleLogout);
 };
 
 init();
