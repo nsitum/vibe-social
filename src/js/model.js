@@ -31,3 +31,7 @@ export const getUsers = async function () {
     console.error(err);
   }
 };
+
+export const loginUser = function (user) {
+  setState(user);
+};

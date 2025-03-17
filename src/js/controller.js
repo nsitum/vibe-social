@@ -1,5 +1,6 @@
 import * as model from "./model.js";
 import loginRegisterView from "./views/loginRegisterView";
+import homePageView from "./views/homePageView.js";
 
 const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
@@ -19,7 +20,8 @@ const handleRegister = async function (data) {
       password: data.password,
     };
     await model.createNewUser(user);
-    alert("Uspješno ste kreirali račun!");
+    console.log("User created successfully!");
+    homePageView.render(model.state);
     loadHomePage();
   } catch (err) {
     loginRegisterView.renderError(err.message);
@@ -31,8 +33,11 @@ const handleLogin = async function (data) {
     const users = await model.getUsers();
     users.forEach((user) => {
       console.log(data, user);
-      if (user.user === data.user && user.password === data.password)
-        alert("Logging you in...");
+      if (user.user === data.user && user.password === data.password) {
+        model.loginUser(user);
+        homePageView.render(model.state);
+        loadHomePage();
+      }
     });
   } catch (err) {
     console.error(err);

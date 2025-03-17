@@ -62,7 +62,8 @@ class LoginRegisterView extends View {
   }
 
   hideForm() {
-    this._parentElement.classList.add("hidden");
+    this._parentElement.innerHTML = "";
+    this._parentElement.style.padding = "0";
   }
 }
 
