@@ -37,17 +37,33 @@ const handleLogin = async function (data) {
         model.loginUser(user);
         homePageView.render(model.state);
         loadHomePage();
+      } else {
+        throw new Error("Netočno korisničko ime ili lozinka!");
       }
     });
+  } catch (err) {
+    loginRegisterView.renderError(err.message);
+  }
+};
+
+const handleAlreadyLoggedIn = async function () {
+  try {
+    const user = await model.checkLoggedIn();
+    model.loginUser(user);
+    homePageView.render(model.state);
+    loadHomePage();
   } catch (err) {
     console.error(err);
   }
 };
 
-const init = function () {
+const init = async function () {
+  await handleAlreadyLoggedIn();
   loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
   loginRegisterView.addHandlerRegister(handleRegister);
   loginRegisterView.addHandlerLogin(handleLogin);
+  loginRegisterView.addHandlerResizeInput();
+  homePageView.addHandlerLogout();
 };
 
 init();

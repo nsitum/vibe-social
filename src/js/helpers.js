@@ -14,9 +14,11 @@ export const sendUser = async function (url, userData) {
   }
 };
 
-export const getUser = async function (url, username) {
+export const getUser = async function (url, id) {
   try {
-    await fetch(`${url}${username}`);
+    const res = await fetch(`${url}users/${id}`);
+    const user = await res.json();
+    return user;
   } catch (err) {
     throw err;
   }

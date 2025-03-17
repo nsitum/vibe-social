@@ -1,5 +1,5 @@
 import { API_URL } from "./config.js";
-import { sendUser, getAllUsers } from "./helpers.js";
+import { sendUser, getUser, getAllUsers } from "./helpers.js";
 
 export const state = {
   id: "",
@@ -11,6 +11,7 @@ const setState = function (currentUser) {
   state.id = currentUser.id;
   state.username = currentUser.username;
   state.email = currentUser.email;
+  localStorage.setItem("loggedInUser", JSON.stringify({ id: currentUser.id }));
 };
 
 export const createNewUser = async function (user) {
@@ -35,3 +36,17 @@ export const getUsers = async function () {
 export const loginUser = function (user) {
   setState(user);
 };
+
+const isLoggedIn = function () {
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  return user;
+};
+
+export const checkLoggedIn = async function () {
+  const loggedUser = isLoggedIn();
+  if (!loggedUser) return;
+  const currentUser = await getUser(API_URL, loggedUser.id);
+  setState(currentUser);
+  return currentUser;
+};
+checkLoggedIn();

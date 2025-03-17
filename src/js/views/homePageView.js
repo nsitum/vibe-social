@@ -5,20 +5,28 @@ class HomePageView {
     this._parentElement.classList.remove("hidden");
     const html = `
       <div class="user-info">
+        <img class="user-profile-picture" src="../../public/profile-picture.jpg" alt="" />
         <p class="user-username">${data.username}</p>
-        <div>
+        <div class="user-actions">
           <button class="user-btn btn-edit">Izmijeni račun</button>
           <button class="user-btn btn-logout">Odjavi se</button>
         </div>
       </div>
       <div class="wall-info">
         <div class="create-post-container">
-          <input type="text" />
-          <button class="create-post-btn">Create post</button>
+          <textarea class="create-post-input" type="text" /> </textarea>
+          <button class="create-post-btn">Kreiraj objavu</button>
         </div>
       </div>
     `;
     this._parentElement.insertAdjacentHTML("afterbegin", html);
+  }
+
+  addHandlerLogout(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".btn-logout");
+      console.log(btn);
+    });
   }
 }
 

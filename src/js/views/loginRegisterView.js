@@ -41,6 +41,7 @@ class LoginRegisterView extends View {
   }
 
   renderError(message = "Nešto je pošlo po zlu") {
+    if (this._parentElement.querySelector(".error-message")) return;
     const html = `<p class="error-message">${message}</p>`;
     this._parentElement.insertAdjacentHTML("beforeend", html);
   }
@@ -64,6 +65,21 @@ class LoginRegisterView extends View {
   hideForm() {
     this._parentElement.innerHTML = "";
     this._parentElement.style.padding = "0";
+  }
+
+  clearEl(el) {
+    el.innerHTML = "";
+  }
+
+  addHandlerResizeInput() {
+    const textarea = document.querySelector(".create-post-input");
+    console.log(textarea);
+    textarea.addEventListener("input", autoResize);
+
+    function autoResize() {
+      this.style.height = "5rem";
+      this.style.height = this.scrollHeight + "px";
+    }
   }
 }
 
