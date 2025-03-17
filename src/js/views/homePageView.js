@@ -5,7 +5,7 @@ class HomePageView {
     this._parentElement.classList.remove("hidden");
     const html = `
       <div class="user-info">
-        <img class="user-profile-picture" src="../../public/profile-picture.jpg" alt="" />
+        <img class="user-profile-picture" src="/profile-picture.jpg" alt="" />
         <p class="user-username">${data.username}</p>
         <div class="user-actions">
           <button class="user-btn btn-edit">Izmijeni račun</button>
@@ -25,6 +25,7 @@ class HomePageView {
   addHandlerLogout(handler) {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".btn-logout");
+      if (!btn) return;
       console.log(btn);
       handler();
     });
