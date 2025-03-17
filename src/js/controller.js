@@ -31,16 +31,18 @@ const handleRegister = async function (data) {
 const handleLogin = async function (data) {
   try {
     const users = await model.getUsers();
+    let foundUser = false;
     users.forEach((user) => {
       console.log(data, user);
-      if (user.user === data.user && user.password === data.password) {
+      if (user.username === data.username && user.password === data.password) {
+        console.log(user.user === data.user && user.password === data.password);
+        foundUser = true;
         model.loginUser(user);
         homePageView.render(model.state);
         loadHomePage();
-      } else {
-        throw new Error("Netočno korisničko ime ili lozinka!");
       }
     });
+    if (!foundUser) throw new Error("Netočno korisničko ime ili lozinka!");
   } catch (err) {
     loginRegisterView.renderError(err.message);
   }

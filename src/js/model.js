@@ -54,7 +54,6 @@ const isLoggedIn = function () {
 export const checkLoggedIn = async function () {
   const loggedUser = isLoggedIn();
   if (!loggedUser) return;
-  alert("aaa");
 
   const currentUser = await getUser(API_URL, loggedUser.id);
   setState(currentUser);
