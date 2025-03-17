@@ -14,7 +14,7 @@ class HomePageView {
       </div>
       <div class="wall-info">
         <div class="create-post-container">
-          <textarea class="create-post-input" type="text" /> </textarea>
+          <textarea class="create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
           <button class="create-post-btn">Kreiraj objavu</button>
         </div>
       </div>
