@@ -51,10 +51,15 @@ const handleLogin = async function (data) {
 const handleAlreadyLoggedIn = async function () {
   try {
     const user = await model.checkLoggedIn();
-    if (!user) return;
+    if (!user) {
+      loginRegisterView.render(model.state);
+      console.log("aaa");
+      return false;
+    }
     model.loginUser(user);
     homePageView.render(model.state);
     loadHomePage();
+    return true;
   } catch (err) {
     console.error(err);
   }
@@ -68,10 +73,13 @@ const handleLogout = function () {
 };
 
 const init = async function () {
-  await handleAlreadyLoggedIn();
-  loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
-  loginRegisterView.addHandlerRegister(handleRegister);
-  loginRegisterView.addHandlerLogin(handleLogin);
+  const isLoggedIn = await handleAlreadyLoggedIn();
+  if (!isLoggedIn) {
+    loginRegisterView.addHandlerRegister(handleRegister);
+    loginRegisterView.addHandlerLogin(handleLogin);
+    loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
+  }
+
   homePageView.addHandlerLogout(handleLogout);
 };
 
