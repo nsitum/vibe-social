@@ -22,10 +22,8 @@ class PostsView extends View {
     });
   }
 
-  renderPost(data) {
-    console.log(data);
+  renderPost(data, isAuthor) {
     const html = `
-
       <li class="post">
         <p class="post-content">${data.content}</p>
         <div class="post-more">
@@ -35,12 +33,31 @@ class PostsView extends View {
             <button class="post-btn post-comment">Komentiraj</button>
           </div>
         </div>
+        ${
+          isAuthor
+            ? ` <div class="post-menu">
+                  <ul class="post-menu-content .hidden-post-menu">
+                    <li class="post-option">Edit post</li>
+                    <li class="post-option">Remove post</li>
+                  </ul>
+                </div>`
+            : ``
+        }
       </li>
-
     `;
     this._parentElement
       .querySelector(".posts")
       .insertAdjacentHTML("afterbegin", html);
+  }
+
+  addHandlerPostMenu() {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".post-menu");
+      if (!btn) return;
+      btn
+        .querySelector(".post-menu-content")
+        .classList.toggle("show-post-menu");
+    });
   }
 }
 

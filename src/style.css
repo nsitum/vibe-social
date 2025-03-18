@@ -153,7 +153,6 @@ body {
   width: 720px;
   white-space: normal;
   word-wrap: break-word;
-  overflow: hidden;
   font-size: 2.4rem;
   border: 1px solid #fff;
   /* padding: 2rem 4rem; */
@@ -162,6 +161,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 }
 
 .post-content {
@@ -192,4 +192,41 @@ body {
   background-color: #4a90e2;
   padding: 0.5rem 1rem;
   cursor: pointer;
+}
+
+.post-menu {
+  width: 1rem;
+  height: 1rem;
+  background-color: #fff;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.post-menu-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 15rem;
+  margin-top: 2rem;
+  background-color: #333;
+  list-style: none;
+  padding: 0.8rem;
+  transition: 0.3s all ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.post-option {
+  font-size: 1.8rem;
+}
+
+.post-option:hover {
+  color: #4a90e2;
+}
+
+.show-post-menu {
+  opacity: 1;
+  pointer-events: auto;
 }

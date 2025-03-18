@@ -39,6 +39,7 @@ const loginUser = function (user) {
   homePageView.addHandlerLogout(handleLogout);
   loadHomePage();
   renderAllPosts();
+  postsView.addHandlerPostMenu();
 };
 
 const handleLogin = async function (data) {
@@ -64,7 +65,6 @@ const handleAlreadyLoggedIn = async function () {
     const user = await model.checkLoggedIn();
     if (!user) {
       loginRegisterView.render(model.state);
-      console.log("aaa");
       return false;
     }
     loginUser(user);
@@ -95,9 +95,11 @@ const handleAddPost = function (data) {
 
 const renderAllPosts = async function () {
   const posts = await model.getPosts();
+  let isAuthor;
   posts.forEach(async (post) => {
     post.username = await model.getUsername(post.user_id);
-    postsView.renderPost(post);
+    post.user_id === +model.state.id ? (isAuthor = true) : (isAuthor = false);
+    postsView.renderPost(post, isAuthor);
   });
 };
 
