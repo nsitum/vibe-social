@@ -8,7 +8,7 @@ export const state = {
   loggedIn: false,
 };
 
-const setState = function (currentUser) {
+export const setState = function (currentUser) {
   state.id = currentUser.id;
   state.username = currentUser.username;
   state.email = currentUser.email;
@@ -42,9 +42,7 @@ export const getUsers = async function () {
   }
 };
 
-export const loginUser = function (user) {
-  setState(user);
-};
+export const loginUser = function (user) {};
 
 const isLoggedIn = function () {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));

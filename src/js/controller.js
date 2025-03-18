@@ -1,6 +1,8 @@
 import * as model from "./model.js";
 import loginRegisterView from "./views/loginRegisterView";
 import homePageView from "./views/homePageView.js";
+import accountInfoView from "./views/accountInfoView.js";
+import postsView from "./views/postsView.js";
 
 const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
@@ -28,6 +30,16 @@ const handleRegister = async function (data) {
   }
 };
 
+const loginUser = function (user) {
+  model.setState(user);
+  homePageView.render(model.state);
+  accountInfoView.render(model.state);
+  postsView.render(model.state);
+  postsView.addHandlerAddPost(handleAddPost);
+  homePageView.addHandlerLogout(handleLogout);
+  loadHomePage();
+};
+
 const handleLogin = async function (data) {
   try {
     const users = await model.getUsers();
@@ -37,9 +49,7 @@ const handleLogin = async function (data) {
       if (user.username === data.username && user.password === data.password) {
         console.log(user.user === data.user && user.password === data.password);
         foundUser = true;
-        model.loginUser(user);
-        homePageView.render(model.state);
-        loadHomePage();
+        loginUser(user);
       }
     });
     if (!foundUser) throw new Error("Netočno korisničko ime ili lozinka!");
@@ -56,9 +66,7 @@ const handleAlreadyLoggedIn = async function () {
       console.log("aaa");
       return false;
     }
-    model.loginUser(user);
-    homePageView.render(model.state);
-    loadHomePage();
+    loginUser(user);
     return true;
   } catch (err) {
     console.error(err);
@@ -72,6 +80,10 @@ const handleLogout = function () {
   location.reload();
 };
 
+const handleAddPost = function (data) {
+  console.log(data);
+};
+
 const init = async function () {
   const isLoggedIn = await handleAlreadyLoggedIn();
   if (!isLoggedIn) {
@@ -80,7 +92,8 @@ const init = async function () {
     loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
   }
 
-  homePageView.addHandlerLogout(handleLogout);
+  if (model.state.loggedIn) {
+  }
 };
 
 init();
