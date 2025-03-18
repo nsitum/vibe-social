@@ -1,5 +1,11 @@
 import { API_URL } from "./config.js";
-import { sendUser, getUser, getAllUsers } from "./helpers.js";
+import {
+  sendUser,
+  getUser,
+  getAllUsers,
+  sendPost,
+  getAllPosts,
+} from "./helpers.js";
 
 export const state = {
   id: "",
@@ -42,7 +48,14 @@ export const getUsers = async function () {
   }
 };
 
-export const loginUser = function (user) {};
+export const getUsername = async function (id) {
+  try {
+    const user = await getUser(API_URL, id);
+    return user.username;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const isLoggedIn = function () {
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -58,3 +71,20 @@ export const checkLoggedIn = async function () {
   return currentUser;
 };
 checkLoggedIn();
+
+export const addPost = async function (data) {
+  try {
+    const post = await sendPost(API_URL, data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getPosts = async function () {
+  try {
+    const posts = await getAllPosts(API_URL);
+    return posts;
+  } catch (err) {
+    console.error(err);
+  }
+};

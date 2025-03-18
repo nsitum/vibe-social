@@ -30,6 +30,32 @@ export const getAllUsers = async function (url) {
     const users = res.json();
     return users;
   } catch (err) {
-    console.err(err);
+    console.error(err);
+  }
+};
+
+export const sendPost = async function (url, data) {
+  try {
+    const res = await fetch(url + "posts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const createdPost = await res.json();
+    return createdPost;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getAllPosts = async function (url) {
+  try {
+    const res = await fetch(url + "posts");
+    const posts = res.json();
+    return posts;
+  } catch (err) {
+    console.error(err);
   }
 };

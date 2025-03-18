@@ -38,6 +38,7 @@ const loginUser = function (user) {
   postsView.addHandlerAddPost(handleAddPost);
   homePageView.addHandlerLogout(handleLogout);
   loadHomePage();
+  renderAllPosts();
 };
 
 const handleLogin = async function (data) {
@@ -81,7 +82,23 @@ const handleLogout = function () {
 };
 
 const handleAddPost = function (data) {
-  console.log(data);
+  const dataObj = {
+    username: model.state.username,
+    user_id: model.state.id,
+    content: data,
+    likes: 0,
+  };
+
+  model.addPost(dataObj);
+  postsView.renderPost(dataObj);
+};
+
+const renderAllPosts = async function () {
+  const posts = await model.getPosts();
+  posts.forEach(async (post) => {
+    post.username = await model.getUsername(post.user_id);
+    postsView.renderPost(post);
+  });
 };
 
 const init = async function () {
@@ -91,9 +108,5 @@ const init = async function () {
     loginRegisterView.addHandlerLogin(handleLogin);
     loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
   }
-
-  if (model.state.loggedIn) {
-  }
 };
-
 init();
