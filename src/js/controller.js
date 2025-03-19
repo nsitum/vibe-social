@@ -21,9 +21,9 @@ const handleRegister = async function (data) {
       email: data.email,
       password: data.password,
     };
-    await model.createNewUser(user);
+    const createdUser = await model.createNewUser(user);
     console.log("User created successfully!");
-    loginUser(user);
+    loginUser(createdUser);
   } catch (err) {
     loginRegisterView.renderError(err.message);
   }

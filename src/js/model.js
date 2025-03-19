@@ -33,7 +33,7 @@ export const createNewUser = async function (user) {
   try {
     // console.log(user);
     const currentUser = await sendUser(API_URL + "users", user);
-    setState(currentUser);
+    return currentUser;
   } catch (err) {
     throw err;
   }
@@ -67,10 +67,8 @@ export const checkLoggedIn = async function () {
   if (!loggedUser) return;
 
   const currentUser = await getUser(API_URL, loggedUser.id);
-  setState(currentUser);
   return currentUser;
 };
-checkLoggedIn();
 
 export const addPost = async function (data) {
   try {
