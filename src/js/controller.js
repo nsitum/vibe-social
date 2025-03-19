@@ -86,6 +86,7 @@ const handleAddPost = function (data) {
     user_id: model.state.id,
     content: data,
     likes: 0,
+    created_at: new Date(),
   };
 
   model.addPost(dataObj);
@@ -94,12 +95,13 @@ const handleAddPost = function (data) {
 
 const renderAllPosts = async function () {
   const posts = await model.getPosts();
-  let isAuthor;
-  posts.forEach(async (post) => {
+  const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
+  console.log(sortedPosts);
+  for (const post of sortedPosts) {
     post.username = await model.getUsername(post.user_id);
-    post.user_id === +model.state.id ? (isAuthor = true) : (isAuthor = false);
+    const isAuthor = post.user_id === model.state.id;
     postsView.renderPost(post, isAuthor);
-  });
+  }
 };
 
 const init = async function () {

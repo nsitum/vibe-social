@@ -23,11 +23,20 @@ class PostsView extends View {
   }
 
   renderPost(data, isAuthor) {
+    data.created_at = new Date(data.created_at);
     const html = `
       <li class="post">
         <p class="post-content">${data.content}</p>
         <div class="post-more">
-          <div class="post-owner">Objavu kreirao: ${data.username}</div>
+          <div class="post-owner">Objavu kreirao: ${
+            data.username
+          }, ${data.created_at.toLocaleDateString(
+      "hr-HR"
+    )}, ${data.created_at.getHours()}:${
+      data.created_at.getMinutes() < 10
+        ? "0" + data.created_at.getMinutes()
+        : data.created_at.getMinutes()
+    }</div>
           <div class="post-actions">
             <button class="post-btn post-like">Sviđa mi se: ${
               data.likes
@@ -55,10 +64,18 @@ class PostsView extends View {
   addHandlerPostMenu() {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-menu");
+      if (
+        this.querySelector(".post-menu-content").classList.contains(
+          "show-post-menu"
+        )
+      ) {
+        this.querySelector(".post-menu-content").classList.remove(
+          "show-post-menu"
+        );
+      }
+
       if (!btn) return;
-      btn
-        .querySelector(".post-menu-content")
-        .classList.toggle("show-post-menu");
+      btn.querySelector(".post-menu-content").classList.add("show-post-menu");
     });
   }
 }
