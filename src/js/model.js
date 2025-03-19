@@ -4,7 +4,9 @@ import {
   getUser,
   getAllUsers,
   sendPost,
+  getOnePost,
   getAllPosts,
+  editOnePost,
 } from "./helpers.js";
 
 export const state = {
@@ -72,7 +74,17 @@ export const checkLoggedIn = async function () {
 
 export const addPost = async function (data) {
   try {
+    if (!data.content) throw new Error("Objava ne može biti prazna!");
     const post = await sendPost(API_URL, data);
+  } catch (err) {
+    alert(err.message);
+  }
+};
+
+export const getPost = async function (postId) {
+  try {
+    const post = await getOnePost(API_URL, postId);
+    return post;
   } catch (err) {
     console.error(err);
   }
@@ -82,6 +94,15 @@ export const getPosts = async function () {
   try {
     const posts = await getAllPosts(API_URL);
     return posts;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const editPost = async function () {
+  try {
+    const post = await editOnePost(post);
+    return post;
   } catch (err) {
     console.error(err);
   }

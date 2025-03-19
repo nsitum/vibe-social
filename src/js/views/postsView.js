@@ -25,7 +25,7 @@ class PostsView extends View {
   renderPost(data, isAuthor) {
     data.created_at = new Date(data.created_at);
     const html = `
-      <li class="post">
+      <li class="post" data-id="${data.id}">
         <p class="post-content">${data.content}</p>
         <div class="post-more">
           <div class="post-owner">Objavu kreirao: ${
@@ -48,8 +48,8 @@ class PostsView extends View {
           isAuthor
             ? ` <div class="post-menu">
                   <ul class="post-menu-content .hidden-post-menu">
-                    <li class="post-option">Edit post</li>
-                    <li class="post-option">Remove post</li>
+                    <li class="post-option edit-post">Edit post</li>
+                    <li class="post-option remove-post">Remove post</li>
                   </ul>
                 </div>`
             : ``
@@ -76,6 +76,33 @@ class PostsView extends View {
 
       if (!btn) return;
       btn.querySelector(".post-menu-content").classList.add("show-post-menu");
+    });
+  }
+
+  addHandlerEditPost(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".edit-post");
+      if (!btn) return;
+      btn.parentElement.classList.remove("show-post-menu");
+      const postEl = btn.closest(".post");
+      const postId = postEl.dataset.id;
+      // this.querySelector(".create-post-input").value = postEl.innerText;
+      const inputHTML = `
+      <div class="create-post-container">
+        <textarea class="create-post-input" type="text" placeholder="Napiši objavu...">${postEl.innerText}</textarea>
+        <button class="create-post-btn">Uredi objavu</button>
+      </div>
+      `;
+      postEl.insertAdjacentHTML("beforeend", inputHTML);
+      // this.querySelector(".create-post-btn").innerText = "Uredi objavu";
+      // this.querySelector(".create-post-input").classList.add("editing");
+      this.querySelector(".create-post-btn").addEventListener(
+        "click",
+        function (e) {
+          e.preventDefault();
+          handler(postId, postEl);
+        }
+      );
     });
   }
 }

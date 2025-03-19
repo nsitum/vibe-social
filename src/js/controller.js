@@ -88,8 +88,8 @@ const handleAddPost = function (data) {
     likes: 0,
     created_at: new Date(),
   };
-
   model.addPost(dataObj);
+  if (!data.content) return;
   postsView.renderPost(dataObj, true);
 };
 
@@ -102,6 +102,18 @@ const renderAllPosts = async function () {
     const isAuthor = post.user_id === model.state.id;
     postsView.renderPost(post, isAuthor);
   }
+  postsView.addHandlerEditPost(handleEditPost);
+};
+
+const handleEditPost = async function (postId, postEl) {
+  console.log(postId);
+  console.log(postEl);
+  const editingPost = await model.getPost(postId);
+  console.log(editingPost);
+  const newPost = { ...editingPost };
+  newPost.content = postEl.querySelector(".create-post-input").value;
+  newPost.created_at = new Date();
+  await model.editPost(newPost);
 };
 
 const init = async function () {
