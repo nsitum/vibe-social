@@ -23,8 +23,7 @@ const handleRegister = async function (data) {
     };
     await model.createNewUser(user);
     console.log("User created successfully!");
-    homePageView.render(model.state);
-    loadHomePage();
+    loginUser(user);
   } catch (err) {
     loginRegisterView.renderError(err.message);
   }
@@ -90,7 +89,7 @@ const handleAddPost = function (data) {
   };
 
   model.addPost(dataObj);
-  postsView.renderPost(dataObj);
+  postsView.renderPost(dataObj, true);
 };
 
 const renderAllPosts = async function () {

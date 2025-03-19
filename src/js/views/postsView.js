@@ -29,7 +29,9 @@ class PostsView extends View {
         <div class="post-more">
           <div class="post-owner">Objavu kreirao: ${data.username}</div>
           <div class="post-actions">
-            <button class="post-btn post-like">Sviđa mi se</button>
+            <button class="post-btn post-like">Sviđa mi se: ${
+              data.likes
+            }</button>
             <button class="post-btn post-comment">Komentiraj</button>
           </div>
         </div>
