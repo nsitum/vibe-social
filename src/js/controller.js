@@ -150,18 +150,16 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
   };
 
   if (didLike) {
-    console.log("aaa");
     post.likes++;
     likeBtn.firstElementChild.innerText++;
-    likeBtn.disabled = true;
     likeBtn.classList.add("liked-post");
     model.state.postsLiked.push(postId);
   }
 
   if (!didLike) {
+    console.log("unlike");
     post.likes--;
     likeBtn.firstElementChild.innerText--;
-    likeBtn.disabled = false;
     likeBtn.classList.remove("liked-post");
     removePostFromUser(postId);
   }

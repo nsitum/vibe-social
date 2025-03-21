@@ -79,7 +79,7 @@ class PostsView extends View {
       const btn = e.target.closest(".post-menu");
       const postMenu = this.querySelector(".post-menu-content");
 
-      if (postMenu.classList.contains("show-post-menu")) {
+      if (postMenu?.classList.contains("show-post-menu")) {
         postMenu.classList.remove("show-post-menu");
       }
       if (!btn) return;
@@ -126,11 +126,14 @@ class PostsView extends View {
 
   addHandlerLikePost(handler) {
     this._parentElement.addEventListener("click", function (e) {
+      console.log("aaaaa");
       const btn = e.target.closest(".post-like");
+      console.log(btn);
       if (!btn) return;
       const postId = btn.closest(".post").dataset.id;
-      if (!btn.classList.contains(".liked-post")) handler(btn, postId, true);
-      if (btn.classList.contains(".liked-post")) handler(btn, postId, false);
+      console.log(btn.classList.contains("liked-post"));
+      if (!btn.classList.contains("liked-post")) handler(btn, postId, true);
+      if (btn.classList.contains("liked-post")) handler(btn, postId, false);
     });
   }
 }
