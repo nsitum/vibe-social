@@ -64,6 +64,7 @@ class PostsView extends View {
   addHandlerPostMenu() {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-menu");
+      if (!btn) return;
       if (
         this.querySelector(".post-menu-content").classList.contains(
           "show-post-menu"
@@ -74,7 +75,6 @@ class PostsView extends View {
         );
       }
 
-      if (!btn) return;
       btn.querySelector(".post-menu-content").classList.add("show-post-menu");
     });
   }

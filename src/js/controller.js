@@ -89,7 +89,7 @@ const handleAddPost = function (data) {
     created_at: new Date(),
   };
   model.addPost(dataObj);
-  if (!data.content) return;
+  if (!dataObj.content) return;
   postsView.renderPost(dataObj, true);
 };
 
