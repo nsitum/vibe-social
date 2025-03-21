@@ -5,8 +5,8 @@ class PostsView extends View {
     this._parentElement = document.querySelector(".wall-info");
     return `
     <div class="create-post-container">
-      <textarea class="create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
-      <button class="create-post-btn">Kreiraj objavu</button>
+      <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
+      <button class="post-btn create-post-btn">Kreiraj objavu</button>
     </div>
     <ul class="posts">
     </ul>
@@ -24,24 +24,33 @@ class PostsView extends View {
 
   renderPost(data, isAuthor) {
     data.created_at = new Date(data.created_at);
+    data.edited_at = new Date(data.edited_at);
+    const info = data.isEdited
+      ? `Objavu uredio: ${data.username}, ${data.edited_at.toLocaleDateString(
+          "hr-HR"
+        )}, ${data.edited_at.getHours()}:${
+          data.edited_at.getMinutes() < 10
+            ? "0" + data.edited_at.getMinutes()
+            : data.edited_at.getMinutes()
+        }`
+      : `Objavu kreirao: ${data.username}, ${data.created_at.toLocaleDateString(
+          "hr-HR"
+        )}, ${data.created_at.getHours()}:${
+          data.created_at.getMinutes() < 10
+            ? "0" + data.created_at.getMinutes()
+            : data.created_at.getMinutes()
+        }`;
+
     const html = `
       <li class="post" data-id="${data.id}">
         <p class="post-content">${data.content}</p>
         <div class="post-more">
-          <div class="post-owner">Objavu kreirao: ${
-            data.username
-          }, ${data.created_at.toLocaleDateString(
-      "hr-HR"
-    )}, ${data.created_at.getHours()}:${
-      data.created_at.getMinutes() < 10
-        ? "0" + data.created_at.getMinutes()
-        : data.created_at.getMinutes()
-    }</div>
+          <div class="post-info">${info}</div>
           <div class="post-actions">
-            <button class="post-btn post-like">Sviđa mi se: ${
+            <button class="post-action-btn post-like">Sviđa mi se: ${
               data.likes
             }</button>
-            <button class="post-btn post-comment">Komentiraj</button>
+            <button class="post-action-btn post-comment">Komentiraj</button>
           </div>
         </div>
         ${
@@ -84,19 +93,21 @@ class PostsView extends View {
       const btn = e.target.closest(".edit-post");
       if (!btn) return;
       btn.parentElement.classList.remove("show-post-menu");
+      if (btn.closest(".post").querySelector(".create-post-container")) return;
       const postEl = btn.closest(".post");
       const postId = postEl.dataset.id;
+      const postContent = postEl.querySelector(".post-content").innerText;
       // this.querySelector(".create-post-input").value = postEl.innerText;
       const inputHTML = `
       <div class="create-post-container">
-        <textarea class="create-post-input" type="text" placeholder="Napiši objavu...">${postEl.innerText}</textarea>
-        <button class="create-post-btn">Uredi objavu</button>
+        <textarea class="post-input" type="text" placeholder="Napiši objavu...">${postContent}</textarea>
+        <button class="post-btn edit-post-btn">Uredi objavu</button>
       </div>
       `;
       postEl.insertAdjacentHTML("beforeend", inputHTML);
       // this.querySelector(".create-post-btn").innerText = "Uredi objavu";
       // this.querySelector(".create-post-input").classList.add("editing");
-      this.querySelector(".create-post-btn").addEventListener(
+      this.querySelector(".edit-post-btn").addEventListener(
         "click",
         function (e) {
           e.preventDefault();

@@ -99,9 +99,9 @@ export const getPosts = async function () {
   }
 };
 
-export const editPost = async function () {
+export const editPost = async function (newPost) {
   try {
-    const post = await editOnePost(post);
+    const post = await editOnePost(API_URL, newPost);
     return post;
   } catch (err) {
     console.error(err);

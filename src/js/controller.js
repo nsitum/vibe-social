@@ -87,6 +87,8 @@ const handleAddPost = function (data) {
     content: data,
     likes: 0,
     created_at: new Date(),
+    edited_at: "",
+    isEdited: false,
   };
   model.addPost(dataObj);
   if (!dataObj.content) return;
@@ -106,14 +108,27 @@ const renderAllPosts = async function () {
 };
 
 const handleEditPost = async function (postId, postEl) {
-  console.log(postId);
-  console.log(postEl);
+  const postContent = postEl.querySelector(".post-content");
+  const postInfo = postEl.querySelector(".post-info");
   const editingPost = await model.getPost(postId);
-  console.log(editingPost);
   const newPost = { ...editingPost };
-  newPost.content = postEl.querySelector(".create-post-input").value;
-  newPost.created_at = new Date();
+
+  newPost.content = postEl.querySelector(".post-input").value;
+  newPost.edited_at = new Date();
+  newPost.isEdited = true;
+  postContent.innerText = newPost.content;
+  postInfo.innerText = `Objavu uredio: ${
+    model.state.username
+  }, ${newPost.edited_at.toLocaleDateString(
+    "hr-HR"
+  )}, ${newPost.edited_at.getHours()}:${
+    newPost.edited_at.getMinutes() < 10
+      ? "0" + newPost.edited_at.getMinutes()
+      : newPost.edited_at.getMinutes()
+  }`;
+
   await model.editPost(newPost);
+  postEl.querySelector(".create-post-container").remove();
 };
 
 const init = async function () {

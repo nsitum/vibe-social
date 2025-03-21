@@ -72,13 +72,15 @@ export const getAllPosts = async function (url) {
 
 export const editOnePost = async function (url, editedPost) {
   try {
-    const res = fetch(url, {
+    const res = await fetch(url + "posts/" + editedPost.id, {
       method: "PUT",
       headers: {
         "Content-Type": "Application/json",
       },
       body: JSON.stringify(editedPost),
     });
+    const post = res.json();
+    return post;
   } catch (err) {
     console.error(err);
   }
