@@ -18,13 +18,15 @@ class PostsView extends View {
       const btn = e.target.closest(".create-post-btn");
       if (!btn) return;
       const data = this.querySelector(".create-post-input").value;
+      this.querySelector(".create-post-input").value = "";
       handler(data);
     });
   }
 
-  renderPost(data, isAuthor) {
+  renderPost(data, isAuthor, isLiked) {
     data.created_at = new Date(data.created_at);
     data.edited_at = new Date(data.edited_at);
+
     const info = data.isEdited
       ? `Objavu uredio: ${data.username}, ${data.edited_at.toLocaleDateString(
           "hr-HR"
@@ -47,9 +49,11 @@ class PostsView extends View {
         <div class="post-more">
           <div class="post-info">${info}</div>
           <div class="post-actions">
-            <button class="post-action-btn post-like">Sviđa mi se: ${
-              data.likes
-            }</button>
+            <button class="post-action-btn post-like ${
+              isLiked ? "liked-post" : ""
+            }">Sviđa mi se: <span class="like-count">${
+      data.likes
+    }</span></button>
             <button class="post-action-btn post-comment">Komentiraj</button>
           </div>
         </div>
@@ -57,8 +61,8 @@ class PostsView extends View {
           isAuthor
             ? ` <div class="post-menu">
                   <ul class="post-menu-content .hidden-post-menu">
-                    <li class="post-option edit-post">Edit post</li>
-                    <li class="post-option remove-post">Remove post</li>
+                    <li class="post-option edit-post">Uredi objavu</li>
+                    <li class="post-option remove-post">Izbriši objavu</li>
                   </ul>
                 </div>`
             : ``
@@ -73,17 +77,12 @@ class PostsView extends View {
   addHandlerPostMenu() {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-menu");
-      if (!btn) return;
-      if (
-        this.querySelector(".post-menu-content").classList.contains(
-          "show-post-menu"
-        )
-      ) {
-        this.querySelector(".post-menu-content").classList.remove(
-          "show-post-menu"
-        );
-      }
+      const postMenu = this.querySelector(".post-menu-content");
 
+      if (postMenu.classList.contains("show-post-menu")) {
+        postMenu.classList.remove("show-post-menu");
+      }
+      if (!btn) return;
       btn.querySelector(".post-menu-content").classList.add("show-post-menu");
     });
   }
@@ -92,12 +91,11 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".edit-post");
       if (!btn) return;
-      btn.parentElement.classList.remove("show-post-menu");
       if (btn.closest(".post").querySelector(".create-post-container")) return;
+      btn.parentElement.classList.remove("show-post-menu");
       const postEl = btn.closest(".post");
       const postId = postEl.dataset.id;
       const postContent = postEl.querySelector(".post-content").innerText;
-      // this.querySelector(".create-post-input").value = postEl.innerText;
       const inputHTML = `
       <div class="create-post-container">
         <textarea class="post-input" type="text" placeholder="Napiši objavu...">${postContent}</textarea>
@@ -105,8 +103,6 @@ class PostsView extends View {
       </div>
       `;
       postEl.insertAdjacentHTML("beforeend", inputHTML);
-      // this.querySelector(".create-post-btn").innerText = "Uredi objavu";
-      // this.querySelector(".create-post-input").classList.add("editing");
       this.querySelector(".edit-post-btn").addEventListener(
         "click",
         function (e) {
@@ -125,6 +121,16 @@ class PostsView extends View {
       const postEl = btn.closest(".post");
       const postId = postEl.dataset.id;
       handler(postId, postEl);
+    });
+  }
+
+  addHandlerLikePost(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".post-like");
+      if (!btn) return;
+      const postId = btn.closest(".post").dataset.id;
+      if (!btn.classList.contains(".liked-post")) handler(btn, postId, true);
+      if (btn.classList.contains(".liked-post")) handler(btn, postId, false);
     });
   }
 }

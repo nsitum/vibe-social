@@ -230,3 +230,8 @@ body {
   opacity: 1;
   pointer-events: auto;
 }
+
+.liked-post {
+  background-color: #1aa;
+  color: #333;
+}

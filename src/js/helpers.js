@@ -14,6 +14,22 @@ export const sendUser = async function (url, userData) {
   }
 };
 
+export const updateUserLikes = async function (url, userId, postsLiked) {
+  try {
+    const res = await fetch(url + "users/" + userId, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ postsLiked }),
+    });
+    const userLikes = await res.json();
+    return userLikes;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getUser = async function (url, id) {
   try {
     const res = await fetch(url + "users/" + id);

@@ -8,6 +8,7 @@ import {
   getAllPosts,
   editOnePost,
   deleteOnePost,
+  updateUserLikes,
 } from "./helpers.js";
 
 export const state = {
@@ -15,6 +16,7 @@ export const state = {
   username: "",
   email: "",
   loggedIn: false,
+  postsLiked: [],
 };
 
 export const setState = function (currentUser) {
@@ -22,6 +24,7 @@ export const setState = function (currentUser) {
   state.username = currentUser.username;
   state.email = currentUser.email;
   state.loggedIn = true;
+  state.postsLiked = currentUser.postsLiked;
   localStorage.setItem("loggedInUser", JSON.stringify({ id: currentUser.id }));
 };
 
@@ -30,6 +33,7 @@ export const clearState = function () {
   state.username = "";
   state.email = "";
   state.loggedIn = false;
+  state.postsLiked = [];
 };
 
 export const createNewUser = async function (user) {
@@ -37,6 +41,15 @@ export const createNewUser = async function (user) {
     // console.log(user);
     const currentUser = await sendUser(API_URL + "users", user);
     return currentUser;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const updateAUserLikes = async function (userId, postsLiked) {
+  try {
+    const userLikes = await updateUserLikes(API_URL, userId, postsLiked);
+    return userLikes;
   } catch (err) {
     throw err;
   }
@@ -112,6 +125,15 @@ export const editPost = async function (newPost) {
 export const deletePost = async function (postId) {
   try {
     const post = await deleteOnePost(API_URL, postId);
+    return post;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const likePost = async function (postId) {
+  try {
+    const post = await editOnePost(API_URL, postId);
     return post;
   } catch (err) {
     console.error(err);

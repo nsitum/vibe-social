@@ -20,9 +20,9 @@ const handleRegister = async function (data) {
       username: data.username,
       email: data.email,
       password: data.password,
+      postsLiked: [],
     };
     const createdUser = await model.createNewUser(user);
-    console.log("User created successfully!");
     loginUser(createdUser);
   } catch (err) {
     loginRegisterView.renderError(err.message);
@@ -46,9 +46,7 @@ const handleLogin = async function (data) {
     const users = await model.getUsers();
     let foundUser = false;
     users.forEach((user) => {
-      console.log(data, user);
       if (user.username === data.username && user.password === data.password) {
-        console.log(user.user === data.user && user.password === data.password);
         foundUser = true;
         loginUser(user);
       }
@@ -101,10 +99,15 @@ const renderAllPosts = async function () {
   for (const post of sortedPosts) {
     post.username = await model.getUsername(post.user_id);
     const isAuthor = post.user_id === model.state.id;
-    postsView.renderPost(post, isAuthor);
+    let isLiked = false;
+    model.state.postsLiked.forEach((likedPost) => {
+      if (likedPost === post.id) isLiked = true;
+    });
+    postsView.renderPost(post, isAuthor, isLiked);
   }
   postsView.addHandlerEditPost(handleEditPost);
   postsView.addHandlerDeletePost(handleDeletePost);
+  postsView.addHandlerLikePost(handleLikePost);
 };
 
 const handleEditPost = async function (postId, postEl) {
@@ -134,6 +137,37 @@ const handleEditPost = async function (postId, postEl) {
 const handleDeletePost = async function (postId, postEl) {
   await model.deletePost(postId);
   postEl.remove();
+};
+
+const handleLikePost = async function (likeBtn, postId, didLike) {
+  const post = await model.getPost(postId);
+
+  const removePostFromUser = (postId) => {
+    const index = model.state.postsLiked.indexOf(postId);
+    if (index !== -1) {
+      model.state.postsLiked.splice(index, 1);
+    }
+  };
+
+  if (didLike) {
+    console.log("aaa");
+    post.likes++;
+    likeBtn.firstElementChild.innerText++;
+    likeBtn.disabled = true;
+    likeBtn.classList.add("liked-post");
+    model.state.postsLiked.push(postId);
+  }
+
+  if (!didLike) {
+    post.likes--;
+    likeBtn.firstElementChild.innerText--;
+    likeBtn.disabled = false;
+    likeBtn.classList.remove("liked-post");
+    removePostFromUser(postId);
+  }
+
+  model.updateAUserLikes(model.state.id, model.state.postsLiked);
+  await model.editPost(post);
 };
 
 const init = async function () {
