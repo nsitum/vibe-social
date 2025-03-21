@@ -98,13 +98,13 @@ const handleAddPost = function (data) {
 const renderAllPosts = async function () {
   const posts = await model.getPosts();
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
-  console.log(sortedPosts);
   for (const post of sortedPosts) {
     post.username = await model.getUsername(post.user_id);
     const isAuthor = post.user_id === model.state.id;
     postsView.renderPost(post, isAuthor);
   }
   postsView.addHandlerEditPost(handleEditPost);
+  postsView.addHandlerDeletePost(handleDeletePost);
 };
 
 const handleEditPost = async function (postId, postEl) {
@@ -129,6 +129,11 @@ const handleEditPost = async function (postId, postEl) {
 
   await model.editPost(newPost);
   postEl.querySelector(".create-post-container").remove();
+};
+
+const handleDeletePost = async function (postId, postEl) {
+  await model.deletePost(postId);
+  postEl.remove();
 };
 
 const init = async function () {

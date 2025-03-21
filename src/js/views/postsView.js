@@ -116,6 +116,17 @@ class PostsView extends View {
       );
     });
   }
+
+  addHandlerDeletePost(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".remove-post");
+      if (!btn) return;
+      btn.parentElement.classList.remove("show-post-menu");
+      const postEl = btn.closest(".post");
+      const postId = postEl.dataset.id;
+      handler(postId, postEl);
+    });
+  }
 }
 
 export default new PostsView();

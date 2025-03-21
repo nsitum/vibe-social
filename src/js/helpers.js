@@ -85,3 +85,16 @@ export const editOnePost = async function (url, editedPost) {
     console.error(err);
   }
 };
+
+export const deleteOnePost = async function (url, id) {
+  try {
+    const res = await fetch(url + "posts/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

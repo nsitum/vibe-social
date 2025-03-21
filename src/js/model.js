@@ -7,6 +7,7 @@ import {
   getOnePost,
   getAllPosts,
   editOnePost,
+  deleteOnePost,
 } from "./helpers.js";
 
 export const state = {
@@ -102,6 +103,15 @@ export const getPosts = async function () {
 export const editPost = async function (newPost) {
   try {
     const post = await editOnePost(API_URL, newPost);
+    return post;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const deletePost = async function (postId) {
+  try {
+    const post = await deleteOnePost(API_URL, postId);
     return post;
   } catch (err) {
     console.error(err);
