@@ -78,7 +78,7 @@ const handleLogout = function () {
   location.reload();
 };
 
-const handleAddPost = function (data) {
+const handleAddPost = async function (data) {
   const dataObj = {
     username: model.state.username,
     user_id: model.state.id,
@@ -88,9 +88,9 @@ const handleAddPost = function (data) {
     edited_at: "",
     isEdited: false,
   };
-  model.addPost(dataObj);
+  const newPost = await model.addPost(dataObj);
   if (!dataObj.content) return;
-  postsView.renderPost(dataObj, true);
+  postsView.renderPost(newPost, true);
 };
 
 const renderAllPosts = async function () {

@@ -90,6 +90,7 @@ export const addPost = async function (data) {
   try {
     if (!data.content) throw new Error("Objava ne može biti prazna!");
     const post = await sendPost(API_URL, data);
+    return post;
   } catch (err) {
     alert(err.message);
   }

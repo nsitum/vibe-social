@@ -26,7 +26,6 @@ class PostsView extends View {
   renderPost(data, isAuthor, isLiked) {
     data.created_at = new Date(data.created_at);
     data.edited_at = new Date(data.edited_at);
-
     const info = data.isEdited
       ? `Objavu uredio: ${data.username}, ${data.edited_at.toLocaleDateString(
           "hr-HR"
@@ -128,10 +127,8 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       console.log("aaaaa");
       const btn = e.target.closest(".post-like");
-      console.log(btn);
       if (!btn) return;
       const postId = btn.closest(".post").dataset.id;
-      console.log(btn.classList.contains("liked-post"));
       if (!btn.classList.contains("liked-post")) handler(btn, postId, true);
       if (btn.classList.contains("liked-post")) handler(btn, postId, false);
     });
