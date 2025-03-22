@@ -14,6 +14,14 @@ const loadHomePage = function () {
 
 const handleRegister = async function (data) {
   try {
+    const users = await model.getUsers();
+    let userExists = false;
+    users.forEach((user) => {
+      if (user.username === data.username && user.email === data.email) {
+        userExists = true;
+      }
+    });
+    if (userExists) throw new Error("User already exists!");
     if (data.password !== data.confirmPassword)
       throw new Error("Lozinke se ne podudaraju!");
     const user = {
