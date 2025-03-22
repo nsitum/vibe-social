@@ -235,3 +235,25 @@ body {
   background-color: #1aa;
   color: #333;
 }
+
+/* COMMENTS */
+.comments {
+  border-top: 4px solid #4a90e2;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0.5rem 1rem;
+}
+
+.comment {
+  color: #fff;
+  width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 2rem;
+  border: 1px solid #fff;
+  padding: 1rem 2rem;
+  background-color: #333;
+  border-radius: 0.5rem;
+}

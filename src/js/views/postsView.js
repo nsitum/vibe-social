@@ -23,7 +23,8 @@ class PostsView extends View {
     });
   }
 
-  renderPost(data, isAuthor, isLiked) {
+  renderPost(data, isAuthor, isLiked, comments) {
+    console.log(comments);
     data.created_at = new Date(data.created_at);
     data.edited_at = new Date(data.edited_at);
     const info = data.isEdited
@@ -66,6 +67,15 @@ class PostsView extends View {
                 </div>`
             : ``
         }
+            <ul class="comments">
+        ${
+          !(comments.length === 0)
+            ? ` 
+                  <h3 class="tertiary-heading">Komentari:</h3>
+                `
+            : ``
+        }
+            </ul>
       </li>
     `;
     this._parentElement
@@ -112,6 +122,44 @@ class PostsView extends View {
     });
   }
 
+  addHandlerCommentPost(handler) {
+    this._parentElement.addEventListener("click", function (e) {
+      const btn = e.target.closest(".post-comment");
+      if (!btn) return;
+      if (btn.closest(".post").querySelector(".create-post-container")) return;
+      const postEl = btn.closest(".post");
+      const postId = postEl.dataset.id;
+      const inputHTML = `
+      <div class="create-post-container">
+        <textarea class="post-input" type="text" placeholder="Napiši komentar..."></textarea>
+        <button class="post-btn edit-post-btn">Komentiraj</button>
+      </div>
+      `;
+      postEl.insertAdjacentHTML("beforeend", inputHTML);
+      this.querySelector(".edit-post-btn").addEventListener(
+        "click",
+        function (e) {
+          e.preventDefault();
+          handler(postId, postEl);
+        }
+      );
+    });
+  }
+
+  renderComment(data) {
+    const html = `
+    <li class="comment">
+      <p class="comment-content">${data.authorUser}: ${data.content}</p>
+      <div class="comment-info"></div>
+    </li>
+  `;
+    const posts = document.querySelector(".posts");
+    console.log(data.post_id);
+    const post = posts.querySelector(`[data-id='${+data.post_id}']`);
+    console.log(post);
+    post.querySelector(".comments").insertAdjacentHTML("beforeend", html);
+  }
+
   addHandlerDeletePost(handler) {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".remove-post");
@@ -125,7 +173,6 @@ class PostsView extends View {
 
   addHandlerLikePost(handler) {
     this._parentElement.addEventListener("click", function (e) {
-      console.log("aaaaa");
       const btn = e.target.closest(".post-like");
       if (!btn) return;
       const postId = btn.closest(".post").dataset.id;

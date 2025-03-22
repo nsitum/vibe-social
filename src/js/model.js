@@ -1,4 +1,4 @@
-import { API_URL } from "./config.js";
+import { API_URL, API_URL_V2 } from "./config.js";
 import {
   sendUser,
   getUser,
@@ -9,6 +9,9 @@ import {
   editOnePost,
   deleteOnePost,
   updateUserLikes,
+  addAComment,
+  addCommentToPost,
+  getAllComments,
 } from "./helpers.js";
 
 export const state = {
@@ -136,6 +139,28 @@ export const likePost = async function (postId) {
   try {
     const post = await editOnePost(API_URL, postId);
     return post;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addComment = async function (comment, postId) {
+  try {
+    const newComment = await addAComment(API_URL_V2, comment);
+    const post = await getPost(postId);
+    const newPostComments = post.comments;
+    newPostComments.push(newComment.id);
+    await addCommentToPost(API_URL, newPostComments, postId);
+    return newComment;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getComments = async function () {
+  try {
+    const comments = await getAllComments(API_URL_V2);
+    return comments;
   } catch (err) {
     console.error(err);
   }

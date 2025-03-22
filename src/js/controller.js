@@ -87,14 +87,25 @@ const handleAddPost = async function (data) {
     created_at: new Date(),
     edited_at: "",
     isEdited: false,
+    comments: [],
   };
   const newPost = await model.addPost(dataObj);
   if (!dataObj.content && likes > 100000 && typeof created_at !== date) return;
   postsView.renderPost(newPost, true);
 };
 
+const getPostComments = async function (postId) {
+  const comments = await model.getComments();
+  const postComments = [];
+  comments.forEach((comment) => {
+    if (comment.post_id === postId) postComments.push(comment);
+  });
+  return postComments;
+};
+
 const renderAllPosts = async function () {
   const posts = await model.getPosts();
+
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
   for (const post of sortedPosts) {
     post.username = await model.getUsername(post.user_id);
@@ -102,16 +113,21 @@ const renderAllPosts = async function () {
     if (invalidPost) continue;
     const isAuthor = post.user_id === model.state.id;
     let isLiked = false;
+
     model.state.postsLiked.forEach((likedPost) => {
       if (likedPost === post.id) isLiked = true;
     });
-    console.log(typeof post.likes);
 
-    postsView.renderPost(post, isAuthor, isLiked);
+    const postComments = await getPostComments(post.id);
+    postsView.renderPost(post, isAuthor, isLiked, postComments);
+    postComments.forEach((comment) => {
+      postsView.renderComment(comment);
+    });
   }
   postsView.addHandlerEditPost(handleEditPost);
   postsView.addHandlerDeletePost(handleDeletePost);
   postsView.addHandlerLikePost(handleLikePost);
+  postsView.addHandlerCommentPost(handleCommentPost);
 };
 
 const handleEditPost = async function (postId, postEl) {
@@ -138,6 +154,20 @@ const handleEditPost = async function (postId, postEl) {
   postEl.querySelector(".create-post-container").remove();
 };
 
+const handleCommentPost = function (postId, postEl) {
+  const postContent = postEl.querySelector(".post-input").value;
+  const newComment = {
+    post_id: postId,
+    content: postContent,
+    user_id: model.state.id,
+    authorUser: model.state.username,
+    likes: 0,
+  };
+  postsView.renderComment(newComment, postEl);
+  model.addComment(newComment, postId);
+  postEl.querySelector(".create-post-container").remove();
+};
+
 const handleDeletePost = async function (postId, postEl) {
   await model.deletePost(postId);
   postEl.remove();
@@ -161,7 +191,6 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
   }
 
   if (!didLike) {
-    console.log("unlike");
     post.likes--;
     likeBtn.firstElementChild.innerText--;
     likeBtn.classList.remove("liked-post");

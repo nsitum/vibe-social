@@ -114,3 +114,43 @@ export const deleteOnePost = async function (url, id) {
     console.error(err);
   }
 };
+
+export const addAComment = async function (url, data) {
+  try {
+    const res = await fetch(url + "comments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const comment = await res.json();
+    return comment;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addCommentToPost = async function (url, comments, id) {
+  try {
+    const res = await fetch(url + "posts/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ comments }),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const getAllComments = async function (url) {
+  try {
+    const res = await fetch(url + "comments");
+    const comments = await res.json();
+    return comments;
+  } catch (err) {
+    console.error(err);
+  }
+};
