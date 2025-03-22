@@ -170,6 +170,7 @@ const handleCommentPost = function (postId, postEl) {
 
 const handleDeletePost = async function (postId, postEl) {
   await model.deletePost(postId);
+  await model.deletePostComments(postId);
   postEl.remove();
 };
 

@@ -12,6 +12,7 @@ import {
   addAComment,
   addCommentToPost,
   getAllComments,
+  deleteComment,
 } from "./helpers.js";
 
 export const state = {
@@ -161,6 +162,31 @@ export const getComments = async function () {
   try {
     const comments = await getAllComments(API_URL_V2);
     return comments;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const getPostComments = async function (postId) {
+  try {
+    const allComments = await getComments();
+    const postComments = [];
+    allComments.forEach((comment) => {
+      if (comment.post_id === postId) postComments.push(comment);
+    });
+    return postComments;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const deletePostComments = async function (postId) {
+  try {
+    const comments = await getPostComments(postId);
+    for (const comment of comments) {
+      if (comment.post_id === postId)
+        await deleteComment(API_URL_V2, comment.id);
+    }
   } catch (err) {
     console.error(err);
   }

@@ -69,7 +69,7 @@ class PostsView extends View {
         }
             <ul class="comments">
         ${
-          !(comments.length === 0)
+          !(comments?.length === 0)
             ? ` 
                   <h3 class="tertiary-heading">Komentari:</h3>
                 `

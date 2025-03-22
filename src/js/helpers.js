@@ -154,3 +154,16 @@ export const getAllComments = async function (url) {
     console.error(err);
   }
 };
+
+export const deleteComment = async function (url, id) {
+  try {
+    const res = await fetch(url + "comments/" + id, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
