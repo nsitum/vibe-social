@@ -23,8 +23,7 @@ class PostsView extends View {
     });
   }
 
-  renderPost(data, isAuthor, isLiked, comments) {
-    console.log(comments);
+  renderPost(data, isAuthor, isLiked, comments = []) {
     data.created_at = new Date(data.created_at);
     data.edited_at = new Date(data.edited_at);
     const info = data.isEdited
