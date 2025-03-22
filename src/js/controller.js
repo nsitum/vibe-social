@@ -89,7 +89,7 @@ const handleAddPost = async function (data) {
     isEdited: false,
   };
   const newPost = await model.addPost(dataObj);
-  if (!dataObj.content) return;
+  if (!dataObj.content && likes > 100000 && typeof created_at !== date) return;
   postsView.renderPost(newPost, true);
 };
 
@@ -98,11 +98,15 @@ const renderAllPosts = async function () {
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
   for (const post of sortedPosts) {
     post.username = await model.getUsername(post.user_id);
+    const invalidPost = !post.username && post.likes > 100000;
+    if (invalidPost) continue;
     const isAuthor = post.user_id === model.state.id;
     let isLiked = false;
     model.state.postsLiked.forEach((likedPost) => {
       if (likedPost === post.id) isLiked = true;
     });
+    console.log(typeof post.likes);
+
     postsView.renderPost(post, isAuthor, isLiked);
   }
   postsView.addHandlerEditPost(handleEditPost);
