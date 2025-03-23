@@ -49,11 +49,9 @@ class AccountInfoView extends View {
     const modalEl = document.querySelector(".modal-overlay");
     const modalUsername = modalEl.querySelector(".modal-username");
     const modalEmail = modalEl.querySelector(".modal-email");
-    const modalPassword = modalEl.querySelector(".modal-password");
 
     modalUsername.value = data.username;
     modalEmail.value = data.email;
-    modalPassword.value = data.password;
   }
 
   addHandlerCloseModifyModal(modalEl) {
@@ -81,6 +79,8 @@ class AccountInfoView extends View {
         newPassword: modalNewPassword,
         oldPassword: modalOldPassword,
       };
+
+      console.log(newData);
 
       handler(newData);
     });
