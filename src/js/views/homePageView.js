@@ -12,15 +12,6 @@ class HomePageView {
     this._parentElement.insertAdjacentHTML("afterbegin", html);
   }
 
-  addHandlerLogout(handler) {
-    this._parentElement.addEventListener("click", function (e) {
-      const btn = e.target.closest(".btn-logout");
-      if (!btn) return;
-      console.log(btn);
-      handler();
-    });
-  }
-
   hideHomePage() {
     this._parentElement.innerHTML = "";
   }

@@ -12,18 +12,31 @@ const loadHomePage = function () {
   loginRegisterView.hideForm();
 };
 
+const passwordValid = function (password) {
+  let isValid = true;
+  if (password.length < 8) isValid = false;
+  return isValid;
+};
+
+const checkUserExists = async function (data) {
+  const users = await model.getUsers();
+  let userExists = false;
+
+  users.forEach((user) => {
+    if (user.username === data.username || user.email === data.email)
+      userExists = true;
+  });
+  return userExists;
+};
+
 const handleRegister = async function (data) {
   try {
-    const users = await model.getUsers();
-    let userExists = false;
-    users.forEach((user) => {
-      if (user.username === data.username && user.email === data.email) {
-        userExists = true;
-      }
-    });
+    const userExists = await checkUserExists(data);
+    const isPasswordValid = passwordValid(data.password);
     if (userExists) throw new Error("User already exists!");
     if (data.password !== data.confirmPassword)
       throw new Error("Lozinke se ne podudaraju!");
+    if (!isPasswordValid) throw new Error("Password is not valid!");
     const user = {
       username: data.username,
       email: data.email,
@@ -43,7 +56,8 @@ const loginUser = function (user) {
   accountInfoView.render(model.state);
   postsView.render(model.state);
   postsView.addHandlerAddPost(handleAddPost);
-  homePageView.addHandlerLogout(handleLogout);
+  accountInfoView.addHandlerLogout(handleLogout);
+  accountInfoView.addHandlerModifyAccountModal(handleOpenModifyAccount);
   loadHomePage();
   renderAllPosts();
   postsView.addHandlerPostMenu();
@@ -208,6 +222,37 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
 
   model.updateAUserLikes(model.state.id, model.state.postsLiked);
   await model.editPost(post);
+};
+
+const handleOpenModifyAccount = function () {
+  accountInfoView.setModifyAccountModalData(model.state);
+  accountInfoView.addHandlerModifyAccount(handleModifyAccount);
+};
+
+const handleModifyAccount = async function (data) {
+  try {
+    const user = await model.getOneUser(model.state.id);
+    if (user.password !== data.oldPassword)
+      throw new Error("Password is not correct");
+    console.log(data);
+    const userExists = await checkUserExists(data);
+    const isPasswordValid = passwordValid(data.oldPassword);
+
+    if (
+      userExists &&
+      data.username !== model.state.username &&
+      data.email !== model.state.email
+    )
+      throw new Error("User already exists");
+    if (!isPasswordValid) throw new Error("Password is not valid");
+
+    model.state.username = data.username;
+    model.state.email = data.email;
+    accountInfoView.updateAccountUsername(data.username);
+    accountInfoView.closeModifyModal();
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const init = async function () {

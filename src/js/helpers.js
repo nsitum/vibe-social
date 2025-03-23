@@ -50,6 +50,24 @@ export const getAllUsers = async function (url) {
   }
 };
 
+export const updateUser = async function (url, user) {
+  try {
+    const res = await fetch(url + "users" + user.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({
+        usernaname: user.username,
+        email: user.email,
+        password: user.newPassword,
+      }),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const sendPost = async function (url, data) {
   try {
     const res = await fetch(url + "posts", {

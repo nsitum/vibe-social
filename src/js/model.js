@@ -59,10 +59,28 @@ export const updateAUserLikes = async function (userId, postsLiked) {
   }
 };
 
+export const getOneUser = async function (id) {
+  try {
+    const user = await getUser(API_URL, id);
+    return user;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const getUsers = async function () {
   try {
     const users = await getAllUsers(API_URL);
     return users;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const updateAUser = async function (user) {
+  try {
+    const user = await updateUser(user);
+    return user;
   } catch (err) {
     console.error(err);
   }

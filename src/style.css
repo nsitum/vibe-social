@@ -257,3 +257,81 @@ body {
   background-color: #333;
   border-radius: 0.5rem;
 }
+
+/* MODIFY ACCOUNT MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  backdrop-filter: blur(8px); /* Blurs the background */
+  z-index: 999;
+  transition: 0.3s all ease-in;
+}
+
+.modify-account-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--primary-color);
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden-modal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 4rem;
+}
+
+.modal-label {
+  color: #fff;
+  font-size: 2rem;
+}
+
+.modal-input {
+  width: 30rem;
+  height: 3rem;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-family: inherit;
+  padding: 1rem 2rem;
+}
+
+.form-modal-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.modify-account-btn {
+  padding: 1rem 2.5rem;
+  margin-top: 1rem;
+  font-family: inherit;
+  background-color: #333;
+  color: var(--primary-color);
+  border: none;
+  cursor: pointer;
+}
+
+.close-modify-modal {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 2.4rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

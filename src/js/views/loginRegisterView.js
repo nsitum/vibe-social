@@ -36,12 +36,12 @@ class LoginRegisterView extends View {
           <input
             class="input password-input"
             type="password"
-            placeholder="Lozinka"
+            placeholder="Lozinka (8 znakova)"
           />
           <input
             class="input password-input"
             type="password"
-            placeholder="Ponovi lozinku"
+            placeholder="Ponovi lozinku (8 znakova)"
           />
           <p class="no-account">
             Već imaš račun?
