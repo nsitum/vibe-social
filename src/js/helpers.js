@@ -52,15 +52,16 @@ export const getAllUsers = async function (url) {
 
 export const updateUser = async function (url, user) {
   try {
-    const res = await fetch(url + "users" + user.id, {
+    console.log(user);
+    const res = await fetch(url + "users/" + user.id, {
       method: "PUT",
       headers: {
         "Content-Type": "Application/json",
       },
       body: JSON.stringify({
-        usernaname: user.username,
+        username: user.username,
         email: user.email,
-        password: user.newPassword,
+        ...(user.newPassword && { password: user.newPassword }),
       }),
     });
   } catch (err) {

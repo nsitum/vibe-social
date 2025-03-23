@@ -3,6 +3,7 @@ import {
   sendUser,
   getUser,
   getAllUsers,
+  updateUser,
   sendPost,
   getOnePost,
   getAllPosts,
@@ -79,8 +80,8 @@ export const getUsers = async function () {
 
 export const updateAUser = async function (user) {
   try {
-    const user = await updateUser(user);
-    return user;
+    const newUser = await updateUser(API_URL, user);
+    return newUser;
   } catch (err) {
     console.error(err);
   }

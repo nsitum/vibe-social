@@ -80,8 +80,6 @@ class AccountInfoView extends View {
         oldPassword: modalOldPassword,
       };
 
-      console.log(newData);
-
       handler(newData);
     });
   }

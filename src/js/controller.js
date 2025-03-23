@@ -234,8 +234,8 @@ const handleModifyAccount = async function (data) {
     const user = await model.getOneUser(model.state.id);
     if (user.password !== data.oldPassword)
       throw new Error("Password is not correct");
-    console.log(data);
     const userExists = await checkUserExists(data);
+    const isNewPasswordValid = passwordValid(data.newPassword);
     const isPasswordValid = passwordValid(data.oldPassword);
 
     if (
@@ -245,11 +245,15 @@ const handleModifyAccount = async function (data) {
     )
       throw new Error("User already exists");
     if (!isPasswordValid) throw new Error("Password is not valid");
+    if (data.newPassword.length > 0 && !isNewPasswordValid)
+      throw new Error("New password is not valid");
 
     model.state.username = data.username;
     model.state.email = data.email;
     accountInfoView.updateAccountUsername(data.username);
     accountInfoView.closeModifyModal();
+    data.id = model.state.id;
+    await model.updateAUser(data);
   } catch (err) {
     console.error(err);
   }
