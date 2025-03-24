@@ -102,3 +102,7 @@ Medium: 11px
   font-weight: 700;
   margin-top: 2rem;
 }
+
+.fa-solid.fa-heart {
+  color: red;
+}

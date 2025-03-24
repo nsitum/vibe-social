@@ -158,10 +158,11 @@ body {
   padding: 3rem 2rem;
 }
 
-.create-post-input {
+.create-post-input-container {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  color: #fff;
 }
 
 .user-post-picture {
@@ -179,6 +180,7 @@ body {
   padding: 1rem 2rem;
   overflow: hidden;
   background-color: #181818;
+  color: #fff;
 }
 
 .post-input::placeholder {
@@ -252,13 +254,15 @@ body {
 
 .post-content {
   margin-top: 1rem;
+  padding: 1rem 0;
 }
 
 .post-more {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-top: 1px solid #777;
-  padding-top: 0.5rem;
+  padding-top: 1rem;
 }
 
 .post-info {
@@ -267,17 +271,26 @@ body {
 }
 
 .post-actions {
-  align-self: flex-end;
   padding: 0 0.5rem 0.5rem 0;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .post-action-btn {
   color: #fff;
-  background-color: #4a90e2;
+  background-color: transparent;
   padding: 0.5rem 1rem;
+  border: none;
+  font-size: 2rem;
   cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.post-action-btn .post-data-count {
+  color: #777;
+  font-size: 1.8rem;
 }
 
 .post-menu {
@@ -315,14 +328,8 @@ body {
   pointer-events: auto;
 }
 
-.liked-post {
-  background-color: #1aa;
-  color: #333;
-}
-
 /* COMMENTS */
 .comments {
-  border-top: 4px solid #4a90e2;
   list-style: none;
   display: flex;
   flex-direction: column;

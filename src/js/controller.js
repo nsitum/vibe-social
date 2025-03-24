@@ -111,8 +111,14 @@ const handleAddPost = async function (data) {
     isEdited: false,
     comments: [],
   };
+  console.log(dataObj);
   const newPost = await model.addPost(dataObj);
-  if (!dataObj.content && likes > 100000 && typeof created_at !== date) return;
+  if (
+    !dataObj.content &&
+    dataObj.likes > 100000 &&
+    typeof dataObj.created_at !== date
+  )
+    return;
   postsView.renderPost(newPost, true);
 };
 
@@ -208,14 +214,18 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
 
   if (didLike) {
     post.likes++;
-    likeBtn.firstElementChild.innerText++;
+    likeBtn.querySelector(".like-count").innerText++;
+    likeBtn.querySelector(".fa-heart").classList.remove("fa-regular");
+    likeBtn.querySelector(".fa-heart").classList.add("fa-solid");
     likeBtn.classList.add("liked-post");
     model.state.postsLiked.push(postId);
   }
 
   if (!didLike) {
     post.likes--;
-    likeBtn.firstElementChild.innerText--;
+    likeBtn.querySelector(".like-count").innerText--;
+    likeBtn.querySelector(".fa-heart").classList.remove("fa-solid");
+    likeBtn.querySelector(".fa-heart").classList.add("fa-regular");
     likeBtn.classList.remove("liked-post");
     removePostFromUser(postId);
   }

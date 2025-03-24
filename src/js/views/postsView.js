@@ -5,7 +5,7 @@ class PostsView extends View {
     this._parentElement = document.querySelector(".wall-info");
     return `
     <div class="create-post-container">
-      <div class="create-post-input">
+      <div class="create-post-input-container">
         <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
         <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
       </div>
@@ -27,6 +27,7 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".create-post-btn");
       if (!btn) return;
+      console.log(this.querySelector(".create-post-input"));
       const data = this.querySelector(".create-post-input").value;
       this.querySelector(".create-post-input").value = "";
       handler(data);
@@ -54,7 +55,7 @@ class PostsView extends View {
             : data.edited_at.getMinutes()
         }`
       : `Objavu kreirao: ${data.username}, `;
-
+    console.log(isLiked);
     const html = `
       <li class="post" data-id="${data.id}">
         <div class="post-user-info">
@@ -66,14 +67,15 @@ class PostsView extends View {
         </div>
         <p class="post-content">${data.content}</p>
         <div class="post-more">
-          <div class="post-info"></div>
           <div class="post-actions">
             <button class="post-action-btn post-like ${
               isLiked ? "liked-post" : ""
-            }">Sviđa mi se: <span class="like-count">${
+            }"><i class="${
+      isLiked ? "fa-solid" : "fa-regular"
+    } fa-heart"></i> <span class="post-data-count like-count">${
       data.likes
     }</span></button>
-            <button class="post-action-btn post-comment">Komentiraj</button>
+            <button class="post-action-btn post-comment"><i class="fa-regular fa-comment"></i> <span class="post-data-count comment-count">7</span></button>
           </div>
         </div>
         ${
