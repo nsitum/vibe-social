@@ -233,29 +233,36 @@ const handleModifyAccount = async function (data) {
   try {
     const user = await model.getOneUser(model.state.id);
     if (user.password !== data.oldPassword)
-      throw new Error("Password is not correct");
+      throw new Error("Stara lozinka nije točna");
     const userExists = await checkUserExists(data);
     const isNewPasswordValid = passwordValid(data.newPassword);
     const isPasswordValid = passwordValid(data.oldPassword);
 
+    console.log(userExists);
+    console.log(data.username !== model.state.username);
+    console.log(data.email !== model.state.email);
+
     if (
       userExists &&
-      data.username !== model.state.username &&
-      data.email !== model.state.email
+      (data.username !== model.state.username ||
+        data.email !== model.state.email)
     )
-      throw new Error("User already exists");
-    if (!isPasswordValid) throw new Error("Password is not valid");
+      throw new Error("Korisničko ime zauzeto");
+    if (!isPasswordValid) throw new Error("Stara lozinka nije valjana");
     if (data.newPassword.length > 0 && !isNewPasswordValid)
-      throw new Error("New password is not valid");
+      throw new Error("Nova lozinka nije valjana");
 
     model.state.username = data.username;
     model.state.email = data.email;
+
     accountInfoView.updateAccountUsername(data.username);
     accountInfoView.closeModifyModal();
+    accountInfoView.clearModifyAccountModalData();
+
     data.id = model.state.id;
     await model.updateAUser(data);
   } catch (err) {
-    console.error(err);
+    accountInfoView.renderModalError(err.message);
   }
 };
 

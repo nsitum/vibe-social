@@ -54,6 +54,15 @@ class AccountInfoView extends View {
     modalEmail.value = data.email;
   }
 
+  clearModifyAccountModalData() {
+    const modalEl = document.querySelector(".modal-overlay");
+    const modalNewPassword = modalEl.querySelector(".modal-password");
+    const modalOldPassword = modalEl.querySelector(".modal-old-password");
+
+    modalNewPassword.value = "";
+    modalOldPassword.value = "";
+  }
+
   addHandlerCloseModifyModal(modalEl) {
     modalEl.addEventListener("click", function (e) {
       const btn = e.target.closest(".close-modify-modal");
@@ -86,6 +95,14 @@ class AccountInfoView extends View {
 
   updateAccountUsername(username) {
     this._parentElement.querySelector(".user-username").innerText = username;
+  }
+
+  renderModalError(message = "Nešto je pošlo po zlu") {
+    const modalEl = document.querySelector(".modify-account-modal");
+    if (document.querySelector(".modal-error")) return;
+    const html = `<p class="modal-error">${message}</p>`;
+
+    modalEl.insertAdjacentHTML("beforeend", html);
   }
 }
 
