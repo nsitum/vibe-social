@@ -4,12 +4,18 @@ class AccountInfoView extends View {
   _generateMarkup() {
     this._parentElement = document.querySelector(".user-info");
     return `
+    <div class="social-about">
+      <img class="social-logo" src="/images.png" alt="" />
+      <h2 class="secondary-heading">Vibe</h2>
+    </div>
+    <div class="social-user">
     <img class="user-profile-picture" src="/profile-picture.jpg" alt="" />
         <p class="user-username">${this._data.username}</p>
         <div class="user-actions">
-          <button class="user-btn btn-edit">Izmijeni račun</button>
-          <button class="user-btn btn-logout">Odjavi se</button>
+          <button class="user-btn btn-edit"><i class="fa-solid fa-pen"></i> <span>Izmijeni račun</span></button>
+          <button class="user-btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Odjavi se</span></button>
         </div>
+    </div>
     `;
   }
 

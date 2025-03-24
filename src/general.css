@@ -57,8 +57,23 @@ Medium: 11px
 2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
 */
 
+.social-about {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 6rem;
+  padding-bottom: 2rem;
+  border-bottom: #333 solid 2px;
+}
+
+.social-logo {
+  width: 5rem;
+  height: 5rem;
+}
+
 .secondary-heading {
-  font-size: 4rem;
+  font-size: 3rem;
+  color: #fff;
 }
 
 .tertiary-heading {

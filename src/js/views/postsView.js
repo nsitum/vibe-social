@@ -5,8 +5,18 @@ class PostsView extends View {
     this._parentElement = document.querySelector(".wall-info");
     return `
     <div class="create-post-container">
-      <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
-      <button class="post-btn create-post-btn">Kreiraj objavu</button>
+      <div class="create-post-input">
+        <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+        <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
+      </div>
+      <div class="create-post-options">
+        <div class="post-options">
+          <div class="option"><i class="fa-solid fa-photo-film"></i> <span>Media content</span></div>
+          <div class="option"><i class="fa-solid fa-hashtag"></i> <span>Hashtags</span></div>
+          <div class="option"><i class="fa-solid fa-clipboard-list"></i> <span>Schedule</span></div>
+        </div>
+        <button class="post-btn create-post-btn">Kreiraj objavu</button>
+      </div>
     </div>
     <ul class="posts">
     </ul>
@@ -26,6 +36,15 @@ class PostsView extends View {
   renderPost(data, isAuthor, isLiked, comments = []) {
     data.created_at = new Date(data.created_at);
     data.edited_at = new Date(data.edited_at);
+
+    const postDate = `${data.created_at.toLocaleDateString(
+      "hr-HR"
+    )} u ${data.created_at.getHours()}:${
+      data.created_at.getMinutes() < 10
+        ? "0" + data.created_at.getMinutes()
+        : data.created_at.getMinutes()
+    }`;
+
     const info = data.isEdited
       ? `Objavu uredio: ${data.username}, ${data.edited_at.toLocaleDateString(
           "hr-HR"
@@ -34,19 +53,20 @@ class PostsView extends View {
             ? "0" + data.edited_at.getMinutes()
             : data.edited_at.getMinutes()
         }`
-      : `Objavu kreirao: ${data.username}, ${data.created_at.toLocaleDateString(
-          "hr-HR"
-        )}, ${data.created_at.getHours()}:${
-          data.created_at.getMinutes() < 10
-            ? "0" + data.created_at.getMinutes()
-            : data.created_at.getMinutes()
-        }`;
+      : `Objavu kreirao: ${data.username}, `;
 
     const html = `
       <li class="post" data-id="${data.id}">
+        <div class="post-user-info">
+          <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+          <div class="post-user-name-date">
+            <div class="post-user-name">${data.username}</div>
+            <div class="post-user-date">${postDate}</div>
+          </div>
+        </div>
         <p class="post-content">${data.content}</p>
         <div class="post-more">
-          <div class="post-info">${info}</div>
+          <div class="post-info"></div>
           <div class="post-actions">
             <button class="post-action-btn post-like ${
               isLiked ? "liked-post" : ""
@@ -59,6 +79,7 @@ class PostsView extends View {
         ${
           isAuthor
             ? ` <div class="post-menu">
+                  <i class="fa-solid fa-ellipsis"></i>
                   <ul class="post-menu-content .hidden-post-menu">
                     <li class="post-option edit-post">Uredi objavu</li>
                     <li class="post-option remove-post">Izbriši objavu</li>
