@@ -14,6 +14,19 @@
     /* 9px / 16px  */
     font-size: 56.25%;
   }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .wall-info {
+    margin: 0;
+  }
+
+  .homepage-container {
+    padding: 2rem;
+    justify-content: space-between;
+  }
 }
 
 /**************************/
@@ -23,5 +36,23 @@
   html {
     /* 8px / 16px = 0.5 = 50% */
     font-size: 50%;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .homepage-container {
+    justify-content: center;
+  }
+}
+
+/**************************/
+/* BELOW 704px (Smaller tablets) */
+/**************************/
+
+@media (max-width: 44em) {
+  .wall-info {
+    width: 50rem;
   }
 }
