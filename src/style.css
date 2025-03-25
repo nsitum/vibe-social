@@ -154,7 +154,7 @@ body {
   flex-direction: column;
   background-color: #181818;
   border-radius: 1rem;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 3rem 2rem;
 }
 
@@ -191,6 +191,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.option {
+  cursor: pointer;
 }
 
 .post-options {

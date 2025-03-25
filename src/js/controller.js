@@ -20,20 +20,21 @@ const passwordValid = function (password) {
 
 const checkUserExists = async function (data) {
   const users = await model.getUsers();
-  let userExists = false;
-
+  let usernameExists = false;
+  let emailExists = false;
   users.forEach((user) => {
-    if (user.username === data.username || user.email === data.email)
-      userExists = true;
+    if (user.username === data.username) usernameExists = true;
+    if (user.email === data.email) emailExists = true;
   });
-  return userExists;
+  return [usernameExists, emailExists];
 };
 
 const handleRegister = async function (data) {
   try {
-    const userExists = await checkUserExists(data);
+    const [usernameExists, emailExists] = await checkUserExists(data);
     const isPasswordValid = passwordValid(data.password);
-    if (userExists) throw new Error("User already exists!");
+    if (usernameExists) throw new Error("Username taken!");
+    if (emailExists) throw new Error("Email taken!");
     if (data.password !== data.confirmPassword)
       throw new Error("Lozinke se ne podudaraju!");
     if (!isPasswordValid) throw new Error("Password is not valid!");
@@ -111,7 +112,6 @@ const handleAddPost = async function (data) {
     isEdited: false,
     comments: [],
   };
-  console.log(dataObj);
   const newPost = await model.addPost(dataObj);
   if (
     !dataObj.content &&
@@ -246,20 +246,23 @@ const handleModifyAccount = async function (data) {
     const user = await model.getOneUser(model.state.id);
     if (user.password !== data.oldPassword)
       throw new Error("Stara lozinka nije točna");
-    const userExists = await checkUserExists(data);
+    const [usernameExists, emailExists] = await checkUserExists(data);
     const isNewPasswordValid = passwordValid(data.newPassword);
     const isPasswordValid = passwordValid(data.oldPassword);
 
-    console.log(userExists);
-    console.log(data.username !== model.state.username);
-    console.log(data.email !== model.state.email);
+    if (usernameExists && data.username !== model.state.username)
+      throw new Error("Username already exists");
+    if (emailExists && data.email !== model.state.email)
+      throw new Error("Email already exists");
 
     if (
-      userExists &&
-      (data.username !== model.state.username ||
-        data.email !== model.state.email)
-    )
-      throw new Error("Korisničko ime zauzeto");
+      data.username === model.state.username &&
+      data.email === model.state.email
+    ) {
+      accountInfoView.closeModifyModal();
+      accountInfoView.clearModifyAccountModalData();
+    }
+
     if (!isPasswordValid) throw new Error("Stara lozinka nije valjana");
     if (data.newPassword.length > 0 && !isNewPasswordValid)
       throw new Error("Nova lozinka nije valjana");

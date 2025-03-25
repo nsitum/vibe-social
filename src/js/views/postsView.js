@@ -11,9 +11,9 @@ class PostsView extends View {
       </div>
       <div class="create-post-options">
         <div class="post-options">
-          <div class="option"><i class="fa-solid fa-photo-film"></i> <span>Media content</span></div>
-          <div class="option"><i class="fa-solid fa-hashtag"></i> <span>Hashtags</span></div>
-          <div class="option"><i class="fa-solid fa-clipboard-list"></i> <span>Schedule</span></div>
+          <div class="option"><i class="fa-solid fa-photo-film"></i> <span>Medijski sadržaj</span></div>
+          <div class="option"><i class="fa-solid fa-hashtag"></i> <span>Hashtagovi</span></div>
+          <div class="option"><i class="fa-solid fa-clipboard-list"></i> <span>Raspored</span></div>
         </div>
         <button class="post-btn create-post-btn">Kreiraj objavu</button>
       </div>
@@ -45,7 +45,6 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".create-post-btn");
       if (!btn) return;
-      console.log(this.querySelector(".create-post-input"));
       const data = this.querySelector(".create-post-input").value;
       this.querySelector(".create-post-input").value = "";
       handler(data);
@@ -73,7 +72,6 @@ class PostsView extends View {
             : data.edited_at.getMinutes()
         }`
       : `Objavu kreirao: ${data.username}, `;
-    console.log(isLiked);
     const html = `
       <li class="post" data-id="${data.id}">
         <div class="post-user-info">
@@ -217,9 +215,7 @@ class PostsView extends View {
     </li>
   `;
     const posts = document.querySelector(".posts");
-    console.log(data.post_id);
     const post = posts.querySelector(`[data-id='${+data.post_id}']`);
-    console.log(post);
     post.querySelector(".comments").insertAdjacentHTML("beforeend", html);
   }
 
