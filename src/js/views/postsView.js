@@ -23,6 +23,24 @@ class PostsView extends View {
     `;
   }
 
+  showLoader() {
+    const postsEl = this._parentElement.querySelector(".posts");
+    postsEl.style.opacity = 0;
+    const html = `
+    <div class="loader-container">
+      <div class="loader"></div>
+    </div>
+    `;
+
+    postsEl.insertAdjacentHTML("beforebegin", html);
+  }
+
+  hideLoader() {
+    const postsEl = this._parentElement.querySelector(".posts");
+    postsEl.style.opacity = 1;
+    document.querySelector(".loader-container").remove();
+  }
+
   addHandlerAddPost(handler) {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".create-post-btn");
@@ -75,7 +93,9 @@ class PostsView extends View {
     } fa-heart"></i> <span class="post-data-count like-count">${
       data.likes
     }</span></button>
-            <button class="post-action-btn post-comment"><i class="fa-regular fa-comment"></i> <span class="post-data-count comment-count">7</span></button>
+            <button class="post-action-btn post-comment"><i class="fa-regular fa-comment"></i> <span class="post-data-count comment-count">${
+              comments?.length
+            }</span></button>
           </div>
         </div>
         ${
@@ -89,15 +109,16 @@ class PostsView extends View {
                 </div>`
             : ``
         }
-            <ul class="comments">
+            
         ${
           !(comments?.length === 0)
             ? ` 
-                  <h3 class="tertiary-heading">Komentari:</h3>
+                  <ul class="comments">
+                  </ul>
                 `
             : ``
         }
-            </ul>
+            
       </li>
     `;
     this._parentElement
@@ -108,12 +129,16 @@ class PostsView extends View {
   addHandlerPostMenu() {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-menu");
-      const postMenu = this.querySelector(".post-menu-content");
-
-      if (postMenu?.classList.contains("show-post-menu")) {
-        postMenu.classList.remove("show-post-menu");
+      if (btn?.querySelector(".show-post-menu") || !btn) {
+        document?.querySelectorAll(".post-menu-content").forEach((menu) => {
+          menu.classList.remove("show-post-menu");
+        });
+        return;
       }
-      if (!btn) return;
+      const postMenu = this.querySelector(".post-menu-content");
+      if (postMenu?.classList.contains("show-post-menu"))
+        postMenu.classList.remove("show-post-menu");
+
       btn.querySelector(".post-menu-content").classList.add("show-post-menu");
     });
   }
@@ -148,31 +173,47 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-comment");
       if (!btn) return;
-      if (btn.closest(".post").querySelector(".create-post-container")) return;
+      if (btn.closest(".post").querySelector(".create-comment-container")) {
+        btn
+          .closest(".post")
+          .querySelector(".create-comment-container")
+          .remove();
+        btn.closest(".post").querySelector(".comments").remove();
+        return;
+      }
       const postEl = btn.closest(".post");
       const postId = postEl.dataset.id;
       const inputHTML = `
-      <div class="create-post-container">
+      <div class="create-comment-container">
         <textarea class="post-input" type="text" placeholder="Napiši komentar..."></textarea>
         <button class="post-btn edit-post-btn">Komentiraj</button>
       </div>
       `;
-      postEl.insertAdjacentHTML("beforeend", inputHTML);
+
+      if (!postEl.querySelector(".comments"))
+        postEl.insertAdjacentHTML("beforeend", '<ul class="comments"></ul>');
+
+      postEl
+        .querySelector(".comments")
+        .insertAdjacentHTML("afterbegin", inputHTML);
+
       this.querySelector(".edit-post-btn").addEventListener(
         "click",
         function (e) {
           e.preventDefault();
           handler(postId, postEl);
+          postEl.querySelector(".comment-count").innerText++;
         }
       );
     });
   }
 
   renderComment(data) {
+    if (!data.content) return;
     const html = `
     <li class="comment">
-      <p class="comment-content">${data.authorUser}: ${data.content}</p>
-      <div class="comment-info"></div>
+      <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+      <p class="comment-content"><span class="comment-author">${data.authorUser}</span> <span class="comment-text">${data.content}</span></p>
     </li>
   `;
     const posts = document.querySelector(".posts");

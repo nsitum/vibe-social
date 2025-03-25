@@ -132,6 +132,7 @@ const getPostComments = async function (postId) {
 };
 
 const renderAllPosts = async function () {
+  postsView.showLoader();
   const posts = await model.getPosts();
 
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
@@ -156,6 +157,7 @@ const renderAllPosts = async function () {
   postsView.addHandlerDeletePost(handleDeletePost);
   postsView.addHandlerLikePost(handleLikePost);
   postsView.addHandlerCommentPost(handleCommentPost);
+  postsView.hideLoader();
 };
 
 const handleEditPost = async function (postId, postEl) {
@@ -193,7 +195,7 @@ const handleCommentPost = function (postId, postEl) {
   };
   postsView.renderComment(newComment, postEl);
   model.addComment(newComment, postId);
-  postEl.querySelector(".create-post-container").remove();
+  postEl.querySelector(".create-comment-container").remove();
 };
 
 const handleDeletePost = async function (postId, postEl) {

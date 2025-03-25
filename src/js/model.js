@@ -139,6 +139,7 @@ export const getPosts = async function () {
 
 export const editPost = async function (newPost) {
   try {
+    if (!newPost.content) throw new Error("Objava ne može biti prazna!");
     const post = await editOnePost(API_URL, newPost);
     return post;
   } catch (err) {
@@ -166,6 +167,7 @@ export const likePost = async function (postId) {
 
 export const addComment = async function (comment, postId) {
   try {
+    if (!comment.content) throw new Error("Komentar ne može biti prazan!");
     const newComment = await addAComment(API_URL_V2, comment);
     const post = await getPost(postId);
     const newPostComments = post.comments;
@@ -173,7 +175,7 @@ export const addComment = async function (comment, postId) {
     await addCommentToPost(API_URL, newPostComments, postId);
     return newComment;
   } catch (err) {
-    console.error(err);
+    alert(err.message);
   }
 };
 

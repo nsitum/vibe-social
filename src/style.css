@@ -218,6 +218,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  transition: 0.3s all ease-in;
+}
+
+@keyframes fadeInSlide {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
 
 .post {
@@ -233,6 +245,8 @@ body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  opacity: 0; /* Ensure the new post starts invisible */
+  animation: fadeInSlide 0.5s ease-out forwards;
 }
 
 .post-user-info {
@@ -333,8 +347,9 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  padding: 0.5rem 1rem;
+  gap: 2.5rem;
+  padding: 2rem 1rem;
+  border-top: 1px solid #777;
 }
 
 .comment {
@@ -342,11 +357,29 @@ body {
   width: 100%;
   white-space: normal;
   word-wrap: break-word;
-  font-size: 2rem;
-  border: 1px solid #fff;
-  padding: 1rem 2rem;
-  background-color: #333;
+  font-size: 1.8rem;
+
   border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.comment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comment-author {
+  font-weight: 700;
+}
+
+.create-comment-container {
+  display: flex;
+}
+
+.create-comment-container .post-input {
+  width: 100%;
 }
 
 /* MODIFY ACCOUNT MODAL */
@@ -367,7 +400,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--primary-color);
+  background-color: #181818;
   padding: 20px;
   z-index: 1000;
   border-radius: 8px;
@@ -411,10 +444,11 @@ body {
   padding: 1rem 2.5rem;
   margin-top: 1rem;
   font-family: inherit;
-  background-color: #333;
-  color: var(--primary-color);
+  background-color: #777;
+  color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 1rem;
 }
 
 .close-modify-modal {
@@ -425,6 +459,7 @@ body {
   background-color: transparent;
   border: none;
   cursor: pointer;
+  color: #777;
 }
 
 .modal-error {
