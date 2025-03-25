@@ -55,4 +55,56 @@
   .wall-info {
     width: 50rem;
   }
+
+  .create-post-container {
+    padding: 2rem 1rem;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .create-post-input-container {
+    width: 36rem;
+    padding: 0;
+    justify-content: flex-start;
+  }
+
+  .create-post-options {
+    width: 10rem;
+  }
+
+  .post-options {
+    display: none;
+  }
+
+  .post-input {
+    width: 30rem;
+  }
+}
+
+/**************************/
+/* BELOW 544px (Phones) */
+/**************************/
+
+@media (max-width: 34em) {
+  .homepage-container {
+    padding: 1rem;
+  }
+
+  .wall-info {
+    width: 40rem;
+  }
+
+  .create-post-container {
+    padding: 1rem 0.5rem;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .create-post-input-container {
+    width: 28rem;
+    padding: 0;
+    justify-content: flex-start;
+  }
 }
