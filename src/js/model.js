@@ -14,6 +14,7 @@ import {
   addCommentToPost,
   getAllComments,
   deleteComment,
+  updateCommentUser,
 } from "./helpers.js";
 
 export const state = {
@@ -208,6 +209,15 @@ export const deletePostComments = async function (postId) {
       if (comment.post_id === postId)
         await deleteComment(API_URL_V2, comment.id);
     }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const updateACommentUser = async function (commentId) {
+  try {
+    const comment = await updateCommentUser(API_URL_V2, commentId);
+    return comment;
   } catch (err) {
     console.error(err);
   }

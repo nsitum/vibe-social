@@ -186,3 +186,17 @@ export const deleteComment = async function (url, id) {
     console.error(err);
   }
 };
+
+export const updateCommentUser = async function (url, id, commentUser) {
+  try {
+    const res = await fetch(url + "comments/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({ authorUser: commentUser }),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

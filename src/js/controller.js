@@ -149,9 +149,15 @@ const renderAllPosts = async function () {
 
     const postComments = await getPostComments(post.id);
     postsView.renderPost(post, isAuthor, isLiked, postComments);
-    postComments.forEach((comment) => {
+    for (const comment of postComments) {
+      const commentAuthor = await model.getOneUser(comment.user_id);
+      comment.authorUser = commentAuthor.username;
       postsView.renderComment(comment);
-    });
+    }
+
+    // postComments.forEach((comment) => {
+    //   postsView.renderComment(comment);
+    // });
   }
   postsView.addHandlerEditPost(handleEditPost);
   postsView.addHandlerDeletePost(handleDeletePost);
@@ -275,6 +281,7 @@ const handleModifyAccount = async function (data) {
     accountInfoView.clearModifyAccountModalData();
 
     data.id = model.state.id;
+    renderAllPosts();
     await model.updateAUser(data);
   } catch (err) {
     accountInfoView.renderModalError(err.message);
