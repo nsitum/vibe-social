@@ -122,17 +122,8 @@ const handleAddPost = async function (data) {
   postsView.renderPost(newPost, true);
 };
 
-const getPostComments = async function (postId) {
-  const comments = await model.getComments();
-  const postComments = [];
-  comments.forEach((comment) => {
-    if (comment.post_id === postId) postComments.push(comment);
-  });
-  return postComments;
-};
-
 const renderAllPosts = async function () {
-  console.log("start");
+  postsView.clearPosts();
   postsView.showLoader();
 
   const [posts, comments, users] = await model.fetchPostsCommentsAndUsers();
@@ -149,7 +140,12 @@ const renderAllPosts = async function () {
       (comment) => comment.post_id === post.id
     );
     postsView.renderPost(post, isAuthor, isLiked, postComments);
-    postComments.forEach((comment) => postsView.renderComment(comment));
+    postComments.forEach((comment) => {
+      comment.authorUser = users.find(
+        (user) => user.id === comment.user_id
+      ).username;
+      postsView.renderComment(comment);
+    });
   });
 
   postsView.addHandlerEditPost(handleEditPost);
@@ -275,8 +271,8 @@ const handleModifyAccount = async function (data) {
     accountInfoView.clearModifyAccountModalData();
 
     data.id = model.state.id;
-    renderAllPosts();
     await model.updateAUser(data);
+    renderAllPosts();
   } catch (err) {
     accountInfoView.renderModalError(err.message);
   }

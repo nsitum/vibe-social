@@ -207,6 +207,7 @@ class PostsView extends View {
   }
 
   renderComment(data) {
+    console.log(data);
     if (!data.content) return;
     const html = `
     <li class="comment">
@@ -238,6 +239,10 @@ class PostsView extends View {
       if (!btn.classList.contains("liked-post")) handler(btn, postId, true);
       if (btn.classList.contains("liked-post")) handler(btn, postId, false);
     });
+  }
+
+  clearPosts() {
+    this._parentElement.querySelector(".posts").innerHTML = "";
   }
 }
 
