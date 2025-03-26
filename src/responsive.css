@@ -38,6 +38,10 @@
     font-size: 50%;
   }
 
+  body {
+    padding-top: 5rem;
+  }
+
   .homepage-container {
     justify-content: center;
   }
