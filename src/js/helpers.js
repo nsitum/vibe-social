@@ -200,3 +200,16 @@ export const updateCommentUser = async function (url, id, commentUser) {
     console.error(err);
   }
 };
+
+export const getPostsCommentsAndUsers = async function (url1, url2) {
+  const postsPromise = fetch(url1 + "posts").then((res) => res.json());
+  const commentsPromise = fetch(url2 + "comments").then((res) => res.json());
+  const usersPromise = fetch(url1 + "users").then((res) => res.json());
+
+  const [posts, comments, users] = await Promise.all([
+    postsPromise,
+    commentsPromise,
+    usersPromise,
+  ]);
+  return [posts, comments, users];
+};

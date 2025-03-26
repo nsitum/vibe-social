@@ -132,38 +132,32 @@ const getPostComments = async function (postId) {
 };
 
 const renderAllPosts = async function () {
+  console.log("start");
   postsView.showLoader();
-  const posts = await model.getPosts();
 
+  const [posts, comments, users] = await model.fetchPostsCommentsAndUsers();
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
-  for (const post of sortedPosts) {
-    post.username = await model.getUsername(post.user_id);
-    const invalidPost = !post.username && post.likes > 100000;
-    if (invalidPost) continue;
+
+  sortedPosts.forEach((post) => {
+    post.username = users.find((user) => user.id === post.user_id).username;
     const isAuthor = post.user_id === model.state.id;
     let isLiked = false;
-
     model.state.postsLiked.forEach((likedPost) => {
       if (likedPost === post.id) isLiked = true;
     });
-
-    const postComments = await getPostComments(post.id);
+    const postComments = comments.filter(
+      (comment) => comment.post_id === post.id
+    );
     postsView.renderPost(post, isAuthor, isLiked, postComments);
-    for (const comment of postComments) {
-      const commentAuthor = await model.getOneUser(comment.user_id);
-      comment.authorUser = commentAuthor.username;
-      postsView.renderComment(comment);
-    }
+    postComments.forEach((comment) => postsView.renderComment(comment));
+  });
 
-    // postComments.forEach((comment) => {
-    //   postsView.renderComment(comment);
-    // });
-  }
   postsView.addHandlerEditPost(handleEditPost);
   postsView.addHandlerDeletePost(handleDeletePost);
   postsView.addHandlerLikePost(handleLikePost);
   postsView.addHandlerCommentPost(handleCommentPost);
   postsView.hideLoader();
+  console.log("finish");
 };
 
 const handleEditPost = async function (postId, postEl) {

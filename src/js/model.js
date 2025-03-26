@@ -15,6 +15,7 @@ import {
   getAllComments,
   deleteComment,
   updateCommentUser,
+  getPostsCommentsAndUsers,
 } from "./helpers.js";
 
 export const state = {
@@ -218,6 +219,15 @@ export const updateACommentUser = async function (commentId) {
   try {
     const comment = await updateCommentUser(API_URL_V2, commentId);
     return comment;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const fetchPostsCommentsAndUsers = async function () {
+  try {
+    const data = await getPostsCommentsAndUsers(API_URL, API_URL_V2);
+    return data;
   } catch (err) {
     console.error(err);
   }

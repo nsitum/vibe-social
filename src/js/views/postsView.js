@@ -216,7 +216,7 @@ class PostsView extends View {
   `;
     const posts = document.querySelector(".posts");
     const post = posts.querySelector(`[data-id='${+data.post_id}']`);
-    post.querySelector(".comments").insertAdjacentHTML("beforeend", html);
+    post?.querySelector(".comments")?.insertAdjacentHTML("beforeend", html);
   }
 
   addHandlerDeletePost(handler) {
