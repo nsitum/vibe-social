@@ -27,15 +27,14 @@ class AccountInfoView extends View {
     });
   }
 
-  openModifyModal() {
-    const modalEl = document.querySelector(".modal-overlay");
+  openModifyModal(modalEl) {
     if (modalEl.classList.contains("hidden-modal"))
       modalEl.classList.remove("hidden-modal");
-    this.addHandlerCloseModifyModal(modalEl);
+    this.addHandlerCloseModal(modalEl);
   }
 
   closeModifyModal() {
-    const modalEl = document.querySelector(".modal-overlay");
+    const modalEl = document.querySelector(".modify-account-modal-overlay");
     modalEl.classList.add("hidden-modal");
   }
 
@@ -45,14 +44,16 @@ class AccountInfoView extends View {
       function (e) {
         const btn = e.target.closest(".btn-edit");
         if (!btn) return;
-        this.openModifyModal();
+        this.openModifyModal(
+          document.querySelector(".modify-account-modal-overlay")
+        );
         handler();
       }.bind(this)
     );
   }
 
   setModifyAccountModalData(data) {
-    const modalEl = document.querySelector(".modal-overlay");
+    const modalEl = document.querySelector(".modify-account-modal-overlay");
     const modalUsername = modalEl.querySelector(".modal-username");
     const modalEmail = modalEl.querySelector(".modal-email");
 
@@ -61,7 +62,7 @@ class AccountInfoView extends View {
   }
 
   clearModifyAccountModalData() {
-    const modalEl = document.querySelector(".modal-overlay");
+    const modalEl = document.querySelector(".modify-account-modal-overlay");
     const modalNewPassword = modalEl.querySelector(".modal-password");
     const modalOldPassword = modalEl.querySelector(".modal-old-password");
 
@@ -69,7 +70,7 @@ class AccountInfoView extends View {
     modalOldPassword.value = "";
   }
 
-  addHandlerCloseModifyModal(modalEl) {
+  addHandlerCloseModal(modalEl) {
     modalEl.addEventListener("click", function (e) {
       const btn = e.target.closest(".close-modify-modal");
       if (!btn) return;
@@ -110,6 +111,32 @@ class AccountInfoView extends View {
 
     modalEl.insertAdjacentHTML("beforeend", html);
   }
+
+  openProfilePictureModal() {
+    const modalEl = document.querySelector(".modify-account-modal-overlay");
+    if (modalEl.classList.contains("hidden-modal"))
+      modalEl.classList.remove("hidden-modal");
+    this.addHandlerCloseProfilePictureModal(modalEl);
+  }
+
+  addHandlerCloseProfilePictureModal() {}
+
+  addHandlerChangeProfilePicture(handler) {
+    this._parentElement.addEventListener(
+      "click",
+      function (e) {
+        const btn = e.target.closest(".user-profile-picture");
+        if (!btn) return;
+        console.log("aaaa");
+        this.openModifyModal(
+          document.querySelector(".profile-picture-modal-overlay")
+        );
+        handler();
+      }.bind(this)
+    );
+  }
+
+  addhandlerUploadPicture() {}
 }
 
 export default new AccountInfoView();

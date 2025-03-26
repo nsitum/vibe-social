@@ -206,7 +206,6 @@ class PostsView extends View {
   }
 
   renderComment(data) {
-    console.log(data);
     if (!data.content) return;
     const html = `
     <li class="comment">

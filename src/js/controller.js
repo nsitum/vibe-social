@@ -4,6 +4,8 @@ import homePageView from "./views/homePageView.js";
 import accountInfoView from "./views/accountInfoView.js";
 import postsView from "./views/postsView.js";
 
+import { TRIGGER_RERENDER } from "./config.js";
+
 const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
 };
@@ -54,8 +56,9 @@ const handleRegister = async function (data) {
 const loginUser = function (user) {
   model.setState(user);
   homePageView.render(model.state);
-  homePageView.addHandlerToggleMobileMenu(handleToggleMobileMenu);
+  homePageView.addHandlerToggleMobileMenu();
   accountInfoView.render(model.state);
+  accountInfoView.addHandlerChangeProfilePicture(handleChangeProfilePicture);
   postsView.render(model.state);
   postsView.addHandlerAddPost(handleAddPost);
   accountInfoView.addHandlerLogout(handleLogout);
@@ -63,10 +66,6 @@ const loginUser = function (user) {
   loadHomePage();
   renderAllPosts();
   postsView.addHandlerPostMenu();
-};
-
-const handleToggleMobileMenu = function () {
-  console.log("aaa");
 };
 
 const handleLogin = async function (data) {
@@ -127,7 +126,7 @@ const handleAddPost = async function (data) {
   postsView.renderPost(newPost, true);
 };
 
-const renderAllPosts = async function () {
+const renderAllPosts = async function (rerender = false) {
   postsView.clearPosts();
   postsView.showLoader();
 
@@ -153,12 +152,13 @@ const renderAllPosts = async function () {
     });
   });
 
-  postsView.addHandlerEditPost(handleEditPost);
-  postsView.addHandlerDeletePost(handleDeletePost);
-  postsView.addHandlerLikePost(handleLikePost);
-  postsView.addHandlerCommentPost(handleCommentPost);
+  if (!rerender) {
+    postsView.addHandlerEditPost(handleEditPost);
+    postsView.addHandlerDeletePost(handleDeletePost);
+    postsView.addHandlerLikePost(handleLikePost);
+    postsView.addHandlerCommentPost(handleCommentPost);
+  }
   postsView.hideLoader();
-  console.log("finish");
 };
 
 const handleEditPost = async function (postId, postEl) {
@@ -277,11 +277,13 @@ const handleModifyAccount = async function (data) {
 
     data.id = model.state.id;
     await model.updateAUser(data);
-    renderAllPosts();
+    renderAllPosts(TRIGGER_RERENDER);
   } catch (err) {
     accountInfoView.renderModalError(err.message);
   }
 };
+
+const handleChangeProfilePicture = function () {};
 
 const init = async function () {
   const isLoggedIn = await handleAlreadyLoggedIn();
