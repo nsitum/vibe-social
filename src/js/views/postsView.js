@@ -176,7 +176,6 @@ class PostsView extends View {
           .closest(".post")
           .querySelector(".create-comment-container")
           .remove();
-        btn.closest(".post").querySelector(".comments").remove();
         return;
       }
       const postEl = btn.closest(".post");

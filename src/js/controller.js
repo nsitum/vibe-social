@@ -186,11 +186,11 @@ const handleCommentPost = function (postId, postEl) {
     post_id: postId,
     content: postContent,
     user_id: model.state.id,
-    authorUser: model.state.username,
     likes: 0,
   };
-  postsView.renderComment(newComment, postEl);
   model.addComment(newComment, postId);
+  newComment.authorUser = model.state.username;
+  postsView.renderComment(newComment, postEl);
   postEl.querySelector(".create-comment-container").remove();
 };
 
