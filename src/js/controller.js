@@ -54,6 +54,7 @@ const handleRegister = async function (data) {
 const loginUser = function (user) {
   model.setState(user);
   homePageView.render(model.state);
+  homePageView.addHandlerToggleMobileMenu(handleToggleMobileMenu);
   accountInfoView.render(model.state);
   postsView.render(model.state);
   postsView.addHandlerAddPost(handleAddPost);
@@ -62,6 +63,10 @@ const loginUser = function (user) {
   loadHomePage();
   renderAllPosts();
   postsView.addHandlerPostMenu();
+};
+
+const handleToggleMobileMenu = function () {
+  console.log("aaa");
 };
 
 const handleLogin = async function (data) {

@@ -38,12 +38,16 @@
     font-size: 50%;
   }
 
-  .user-info {
-    display: none;
-  }
-
   .homepage-container {
     justify-content: center;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+
+  .mobile-hidden {
+    display: none;
   }
 }
 
