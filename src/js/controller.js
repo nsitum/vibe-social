@@ -65,7 +65,7 @@ const loginUser = function (user) {
   homePageView.render(model.state);
   homePageView.addHandlerToggleMobileMenu();
   accountInfoView.render(model.state);
-  accountInfoView.addHandlerChangeProfilePicture(handleChangeProfilePicture);
+  accountInfoView.addHandlerChangeProfilePicture(handlerChangeProfilePicture);
   postsView.render(model.state);
   postsView.addHandlerAddPost(handleAddPost);
   accountInfoView.addHandlerLogout(handleLogout);
@@ -128,6 +128,7 @@ const handleAddPost = async function (data) {
     edited_at: "",
     isEdited: false,
     comments: [],
+    profilePicture: model.state.profilePicture,
   };
   const newPost = await model.addPost(dataObj);
   if (
@@ -147,7 +148,9 @@ const renderAllPosts = async function (rerender = false) {
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
 
   sortedPosts.forEach((post) => {
-    post.username = users.find((user) => user.id === post.user_id).username;
+    const postUser = users.find((user) => user.id === post.user_id);
+    post.username = postUser.username;
+    post.profilePicture = postUser.pictureUrl;
     const isAuthor = post.user_id === model.state.id;
     let isLiked = false;
     model.state.postsLiked.forEach((likedPost) => {
@@ -158,9 +161,9 @@ const renderAllPosts = async function (rerender = false) {
     );
     postsView.renderPost(post, isAuthor, isLiked, postComments);
     postComments.forEach((comment) => {
-      comment.authorUser = users.find(
-        (user) => user.id === comment.user_id
-      ).username;
+      const commentUser = users.find((user) => user.id === comment.user_id);
+      comment.authorUser = commentUser.username;
+      comment.profilePicture = commentUser.pictureUrl;
       postsView.renderComment(comment);
     });
   });
@@ -296,7 +299,31 @@ const handleModifyAccount = async function (data) {
   }
 };
 
-const handleChangeProfilePicture = function () {};
+const handleUploadPicture = async function (file) {
+  try {
+    console.log(file);
+    if (!file) throw new Error("Molimo prenesite sliku!");
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const profilePicture = await model.uploadAPicture(formData);
+    model.state.pictureUrl = profilePicture.data.url;
+    await model.updateAUserProfilePicture(
+      model.state.id,
+      profilePicture.data.url
+    );
+    accountInfoView.setProfilePicture(profilePicture.data.url);
+    accountInfoView.closeUploadPictureModal();
+    renderAllPosts(TRIGGER_RERENDER);
+  } catch (err) {
+    accountInfoView.renderModalError(err.message, "picture");
+  }
+};
+
+const handlerChangeProfilePicture = function () {
+  accountInfoView.addHandlerUploadPicture(handleUploadPicture);
+};
 
 const init = async function () {
   const isLoggedIn = await handleAlreadyLoggedIn();

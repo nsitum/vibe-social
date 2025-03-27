@@ -9,7 +9,7 @@ class AccountInfoView extends View {
       <h2 class="secondary-heading">Vibe</h2>
     </div>
     <div class="social-user">
-    <img class="user-profile-picture" src="/profile-picture.jpg" alt="" />
+    <img class="user-profile-picture" src="${this._data.profilePicture}" alt="" />
         <p class="user-username">${this._data.username}</p>
         <div class="user-actions">
           <button class="user-btn btn-edit"><i class="fa-solid fa-pen"></i> <span>Izmijeni račun</span></button>
@@ -104,8 +104,14 @@ class AccountInfoView extends View {
     this._parentElement.querySelector(".user-username").innerText = username;
   }
 
-  renderModalError(message = "Nešto je pošlo po zlu") {
-    const modalEl = document.querySelector(".modify-account-modal");
+  renderModalError(message = "Nešto je pošlo po zlu", modalType) {
+    let modalNumber = 0;
+
+    if (modalType === "picture") modalNumber = 1;
+
+    const modalEl = document.querySelectorAll(".modify-account-modal")[
+      modalNumber
+    ];
     if (document.querySelector(".modal-error")) return;
     const html = `<p class="modal-error">${message}</p>`;
 
@@ -119,7 +125,10 @@ class AccountInfoView extends View {
     this.addHandlerCloseProfilePictureModal(modalEl);
   }
 
-  addHandlerCloseProfilePictureModal() {}
+  closeUploadPictureModal() {
+    const modalEl = document.querySelector(".profile-picture-modal-overlay");
+    modalEl.classList.add("hidden-modal");
+  }
 
   addHandlerChangeProfilePicture(handler) {
     this._parentElement.addEventListener(
@@ -127,7 +136,6 @@ class AccountInfoView extends View {
       function (e) {
         const btn = e.target.closest(".user-profile-picture");
         if (!btn) return;
-        console.log("aaaa");
         this.openModifyModal(
           document.querySelector(".profile-picture-modal-overlay")
         );
@@ -136,7 +144,23 @@ class AccountInfoView extends View {
     );
   }
 
-  addhandlerUploadPicture() {}
+  addHandlerUploadPicture(handler) {
+    document
+      .querySelector(".profile-picture-btn")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("fileInput");
+        const file = fileInput.files[0];
+        handler(file);
+      });
+  }
+
+  setProfilePicture(imgPath) {
+    this._parentElement.querySelector(".user-profile-picture").src = imgPath;
+    document.querySelector(".create-post-container .user-profile-picture").src =
+      imgPath;
+    console.log(imgPath);
+  }
 }
 
 export default new AccountInfoView();

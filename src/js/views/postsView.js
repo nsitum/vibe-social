@@ -6,7 +6,7 @@ class PostsView extends View {
     return `
     <div class="create-post-container">
       <div class="create-post-input-container">
-        <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+        <img class="user-profile-picture user-post-picture" src="${this._data.profilePicture}" alt="" />
         <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
       </div>
       <div class="create-post-options">
@@ -75,7 +75,9 @@ class PostsView extends View {
     const html = `
       <li class="post" data-id="${data.id}">
         <div class="post-user-info">
-          <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+          <img class="user-profile-picture user-post-picture" src="${
+            data.profilePicture
+          }" alt="" />
           <div class="post-user-name-date">
             <div class="post-user-name">${data.username}</div>
             <div class="post-user-date">${postDate}</div>
@@ -209,7 +211,7 @@ class PostsView extends View {
     if (!data.content) return;
     const html = `
     <li class="comment">
-      <img class="user-profile-picture user-post-picture" src="/profile-picture.jpg" alt="" />
+      <img class="user-profile-picture user-post-picture" src="${data.profilePicture}" alt="" />
       <p class="comment-content"><span class="comment-author">${data.authorUser}</span> <span class="comment-text">${data.content}</span></p>
     </li>
   `;

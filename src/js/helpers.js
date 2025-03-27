@@ -213,3 +213,34 @@ export const getPostsCommentsAndUsers = async function (url1, url2) {
   ]);
   return [posts, comments, users];
 };
+
+export const uploadPicture = async function (url, picture) {
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: picture,
+    });
+
+    const data = await res.json();
+    if (data.success) return data;
+    else throw new Error("Error uploading a picture");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const updateUserProfilePicture = async function (url, id, pictureUrl) {
+  try {
+    const res = await fetch(url + "users/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "Application/json",
+      },
+      body: JSON.stringify({
+        pictureUrl,
+      }),
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};

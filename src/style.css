@@ -138,6 +138,34 @@ body {
   transform: scale(1.05);
 }
 
+.form-profile-picture {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 4rem;
+  color: #fff;
+}
+
+.profile-picture-btn {
+  padding: 1rem 2.5rem;
+  margin-top: 1rem;
+  font-family: inherit;
+  background-color: #777;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 1rem;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .user-username {
   color: #fff;
   font-size: 3.6rem;

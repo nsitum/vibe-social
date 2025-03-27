@@ -119,4 +119,12 @@
   .create-post-options {
     width: 100%;
   }
+
+  .profile-picture-modal-overlay .modify-account-modal {
+    width: 40rem;
+  }
+
+  .custom-file-upload {
+    overflow: hidden;
+  }
 }

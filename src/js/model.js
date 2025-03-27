@@ -1,4 +1,4 @@
-import { API_URL, API_URL_V2 } from "./config.js";
+import { API_URL, API_URL_V2, PICTURE_API_URL } from "./config.js";
 import {
   sendUser,
   getUser,
@@ -16,6 +16,8 @@ import {
   deleteComment,
   updateCommentUser,
   getPostsCommentsAndUsers,
+  uploadPicture,
+  updateUserProfilePicture,
 } from "./helpers.js";
 
 export const state = {
@@ -24,6 +26,7 @@ export const state = {
   email: "",
   loggedIn: false,
   postsLiked: [],
+  profilePicture: "",
 };
 
 export const setState = function (currentUser) {
@@ -32,6 +35,7 @@ export const setState = function (currentUser) {
   state.email = currentUser.email;
   state.loggedIn = true;
   state.postsLiked = currentUser.postsLiked;
+  state.profilePicture = currentUser.pictureUrl;
   localStorage.setItem("loggedInUser", JSON.stringify({ id: currentUser.id }));
 };
 
@@ -83,6 +87,15 @@ export const getUsers = async function () {
 export const updateAUser = async function (user) {
   try {
     const newUser = await updateUser(API_URL, user);
+    return newUser;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const updateAUserProfilePicture = async function (userId, pictureUrl) {
+  try {
+    const newUser = await updateUserProfilePicture(API_URL, userId, pictureUrl);
     return newUser;
   } catch (err) {
     console.error(err);
@@ -227,6 +240,15 @@ export const updateACommentUser = async function (commentId) {
 export const fetchPostsCommentsAndUsers = async function () {
   try {
     const data = await getPostsCommentsAndUsers(API_URL, API_URL_V2);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const uploadAPicture = async function (picture) {
+  try {
+    const data = await uploadPicture(PICTURE_API_URL, picture);
     return data;
   } catch (err) {
     console.error(err);
