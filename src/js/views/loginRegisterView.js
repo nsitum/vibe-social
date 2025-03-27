@@ -30,18 +30,18 @@ class LoginRegisterView extends View {
           <input
             class="input username-input"
             type="text"
-            placeholder="Korisničko ime"
+            placeholder="Korisničko ime (barem 3 znaka)"
           />
           <input class="input email-input" type="email" placeholder="E-mail" />
           <input
             class="input password-input"
             type="password"
-            placeholder="Lozinka (8 znakova)"
+            placeholder="Lozinka (barem 8 znakova)"
           />
           <input
             class="input password-input"
             type="password"
-            placeholder="Ponovi lozinku (8 znakova)"
+            placeholder="Ponovi lozinku (barem 8 znakova)"
           />
           <p class="no-account">
             Već imaš račun?
@@ -93,9 +93,15 @@ class LoginRegisterView extends View {
   }
 
   renderError(message = "Nešto je pošlo po zlu") {
-    if (this._parentElement.querySelector(".error-message")) return;
-    const html = `<p class="error-message">${message}</p>`;
-    this._parentElement.insertAdjacentHTML("beforeend", html);
+    const errorMessageEl = this._parentElement?.querySelector(".error-message");
+    if (errorMessageEl && errorMessageEl.textContent === message) return;
+
+    if (errorMessageEl) {
+      errorMessageEl.textContent = message;
+    } else {
+      const html = `<p class="error-message">${message}</p>`;
+      this._parentElement.insertAdjacentHTML("beforeend", html);
+    }
   }
 
   addHandlerLogin(handler) {

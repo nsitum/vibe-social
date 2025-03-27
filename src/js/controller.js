@@ -14,6 +14,13 @@ const loadHomePage = function () {
   loginRegisterView.hideForm();
 };
 
+const usernameValid = function (username) {
+  let isValid = true;
+  if (username.length < 3) isValid = false;
+  if (username.includes(" ")) isValid = false;
+  return isValid;
+};
+
 const passwordValid = function (password) {
   let isValid = true;
   if (password.length < 8) isValid = false;
@@ -70,6 +77,12 @@ const loginUser = function (user) {
 
 const handleLogin = async function (data) {
   try {
+    const isUsernameValid = usernameValid(data.username);
+    const isPasswordValid = passwordValid(data.password);
+    console.log(isUsernameValid);
+    if (!isUsernameValid) throw new Error("Korisničko ime nije valjano");
+    if (!isPasswordValid) throw new Error("Lozinka nije valjana");
+
     const users = await model.getUsers();
     let foundUser = false;
     users.forEach((user) => {

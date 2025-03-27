@@ -233,9 +233,14 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-like");
       if (!btn) return;
+      btn.disabled = true;
       const postId = btn.closest(".post").dataset.id;
       if (!btn.classList.contains("liked-post")) handler(btn, postId, true);
       if (btn.classList.contains("liked-post")) handler(btn, postId, false);
+
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 500);
     });
   }
 
