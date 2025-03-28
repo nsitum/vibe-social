@@ -4,7 +4,7 @@ import homePageView from "./views/homePageView.js";
 import accountInfoView from "./views/accountInfoView.js";
 import postsView from "./views/postsView.js";
 
-import { TRIGGER_RERENDER } from "./config.js";
+import { TRIGGER_RERENDER, DEFAULT_PICTURE_URL } from "./config.js";
 
 const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
@@ -52,8 +52,10 @@ const handleRegister = async function (data) {
       email: data.email,
       password: data.password,
       postsLiked: [],
+      pictureUrl: DEFAULT_PICTURE_URL,
     };
     const createdUser = await model.createNewUser(user);
+    console.log(createdUser);
     loginUser(createdUser);
   } catch (err) {
     loginRegisterView.renderError(err.message);
@@ -211,6 +213,7 @@ const handleCommentPost = function (postId, postEl) {
   };
   model.addComment(newComment, postId);
   newComment.authorUser = model.state.username;
+  newComment.profilePicture = model.state.profilePicture;
   postsView.renderComment(newComment, postEl);
   postEl.querySelector(".create-comment-container").remove();
 };

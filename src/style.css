@@ -132,6 +132,9 @@ body {
   background-color: #333;
   transition: 0.3s all ease;
   cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .user-profile-picture:hover {
@@ -222,6 +225,7 @@ body {
 .wall-info {
   margin: 0 auto;
   border-radius: 1rem;
+  max-width: 72rem;
 }
 
 .create-post-container {
