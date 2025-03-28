@@ -46,7 +46,8 @@ class PostsView extends View {
       const btn = e.target.closest(".create-post-btn");
       if (!btn) return;
       const data = this.querySelector(".create-post-input").value;
-      this.querySelector(".create-post-input").value = "";
+      if (data.length < 300)
+        this.querySelector(".create-post-input").value = "";
       handler(data);
     });
   }

@@ -16,7 +16,7 @@ const loadHomePage = function () {
 
 const usernameValid = function (username) {
   let isValid = true;
-  if (username.length < 3) isValid = false;
+  if (username.length < 3 || username.length > 15) isValid = false;
   if (username.includes(" ")) isValid = false;
   return isValid;
 };
@@ -41,11 +41,13 @@ const checkUserExists = async function (data) {
 const handleRegister = async function (data) {
   try {
     const [usernameExists, emailExists] = await checkUserExists(data);
+    const isUsernameValid = usernameValid(data.username);
     const isPasswordValid = passwordValid(data.password);
     if (usernameExists) throw new Error("Username taken!");
     if (emailExists) throw new Error("Email taken!");
     if (data.password !== data.confirmPassword)
       throw new Error("Lozinke se ne podudaraju!");
+    if (!isUsernameValid) throw new Error("Username is not valid!");
     if (!isPasswordValid) throw new Error("Password is not valid!");
     const user = {
       username: data.username,
@@ -121,25 +123,26 @@ const handleLogout = function () {
 };
 
 const handleAddPost = async function (data) {
-  const dataObj = {
-    username: model.state.username,
-    user_id: model.state.id,
-    content: data,
-    likes: 0,
-    created_at: new Date(),
-    edited_at: "",
-    isEdited: false,
-    comments: [],
-    profilePicture: model.state.profilePicture,
-  };
-  const newPost = await model.addPost(dataObj);
-  if (
-    !dataObj.content &&
-    dataObj.likes > 100000 &&
-    typeof dataObj.created_at !== date
-  )
-    return;
-  postsView.renderPost(newPost, true);
+  try {
+    if (data.length > 300) throw new Error("Objava je preduga!");
+
+    const dataObj = {
+      username: model.state.username,
+      user_id: model.state.id,
+      content: data,
+      likes: 0,
+      created_at: new Date(),
+      edited_at: "",
+      isEdited: false,
+      comments: [],
+      profilePicture: model.state.profilePicture,
+    };
+    const newPost = await model.addPost(dataObj);
+
+    postsView.renderPost(newPost, true);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const renderAllPosts = async function (rerender = false) {
@@ -204,18 +207,23 @@ const handleEditPost = async function (postId, postEl) {
 };
 
 const handleCommentPost = function (postId, postEl) {
-  const postContent = postEl.querySelector(".post-input").value;
-  const newComment = {
-    post_id: postId,
-    content: postContent,
-    user_id: model.state.id,
-    likes: 0,
-  };
-  model.addComment(newComment, postId);
-  newComment.authorUser = model.state.username;
-  newComment.profilePicture = model.state.profilePicture;
-  postsView.renderComment(newComment, postEl);
-  postEl.querySelector(".create-comment-container").remove();
+  try {
+    const postContent = postEl.querySelector(".post-input").value;
+    if (postContent.length > 300) throw new Error("Komentar je predug!");
+    const newComment = {
+      post_id: postId,
+      content: postContent,
+      user_id: model.state.id,
+      likes: 0,
+    };
+    model.addComment(newComment, postId);
+    newComment.authorUser = model.state.username;
+    newComment.profilePicture = model.state.profilePicture;
+    postsView.renderComment(newComment, postEl);
+    postEl.querySelector(".create-comment-container").remove();
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const handleDeletePost = async function (postId, postEl) {
