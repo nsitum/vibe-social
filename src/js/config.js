@@ -4,3 +4,4 @@ export const PICTURE_API_URL =
   "https://api.imgbb.com/1/upload?key=1f8988d2d3af8f2806d4d77a1325ec15";
 export const DEFAULT_PICTURE_URL = "https://i.ibb.co/PZc8hcgv/defaultimage.jpg";
 export const TRIGGER_RERENDER = true;
+export const FORCE_LOGOUT = true;

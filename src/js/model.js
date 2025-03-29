@@ -117,11 +117,16 @@ const isLoggedIn = function () {
 };
 
 export const checkLoggedIn = async function () {
-  const loggedUser = isLoggedIn();
-  if (!loggedUser) return;
+  try {
+    const loggedUser = isLoggedIn();
+    if (!loggedUser) return false;
 
-  const currentUser = await getUser(API_URL, loggedUser.id);
-  return currentUser;
+    const currentUser = await getUser(API_URL, loggedUser.id);
+    if (!currentUser) return false;
+    return currentUser;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const addPost = async function (data) {

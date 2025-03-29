@@ -33,6 +33,7 @@ export const updateUserLikes = async function (url, userId, postsLiked) {
 export const getUser = async function (url, id) {
   try {
     const res = await fetch(url + "users/" + id);
+    if (!res.ok) return false;
     const user = await res.json();
     return user;
   } catch (err) {

@@ -4,7 +4,11 @@ import homePageView from "./views/homePageView.js";
 import accountInfoView from "./views/accountInfoView.js";
 import postsView from "./views/postsView.js";
 
-import { TRIGGER_RERENDER, DEFAULT_PICTURE_URL } from "./config.js";
+import {
+  TRIGGER_RERENDER,
+  DEFAULT_PICTURE_URL,
+  FORCE_LOGOUT,
+} from "./config.js";
 
 const handleToggleLoginRegister = function () {
   loginRegisterView.toggleLoginRegister();
@@ -115,11 +119,11 @@ const handleAlreadyLoggedIn = async function () {
   }
 };
 
-const handleLogout = function () {
+const handleLogout = function (forceLogout = false) {
   homePageView.hideHomePage();
   localStorage.clear();
   model.clearState();
-  location.reload();
+  if (!forceLogout) location.reload();
 };
 
 const handleAddPost = async function (data) {
@@ -275,14 +279,15 @@ const handleModifyAccount = async function (data) {
     if (user.password !== data.oldPassword)
       throw new Error("Stara lozinka nije točna");
     const [usernameExists, emailExists] = await checkUserExists(data);
+    const isUsernameValid = usernameValid(data.username);
     const isNewPasswordValid = passwordValid(data.newPassword);
     const isPasswordValid = passwordValid(data.oldPassword);
 
+    if (!isUsernameValid) throw new Error("Korisničko ime nije ispravno");
     if (usernameExists && data.username !== model.state.username)
       throw new Error("Username already exists");
     if (emailExists && data.email !== model.state.email)
       throw new Error("Email already exists");
-
     if (
       data.username === model.state.username &&
       data.email === model.state.email
@@ -338,7 +343,10 @@ const handlerChangeProfilePicture = function () {
 
 const init = async function () {
   const isLoggedIn = await handleAlreadyLoggedIn();
+
+  console.log(isLoggedIn);
   if (!isLoggedIn) {
+    handleLogout(FORCE_LOGOUT);
     loginRegisterView.addHandlerRegister(handleRegister);
     loginRegisterView.addHandlerLogin(handleLogin);
     loginRegisterView.addHandlerToggleLoginRegister(handleToggleLoginRegister);
