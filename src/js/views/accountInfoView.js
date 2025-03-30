@@ -16,6 +16,7 @@ class AccountInfoView extends View {
           <button class="user-btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Odjavi se</span></button>
         </div>
     </div>
+    <p class="info-message"></p>
     `;
   }
 

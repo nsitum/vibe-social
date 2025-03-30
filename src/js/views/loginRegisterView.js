@@ -50,6 +50,7 @@ class LoginRegisterView extends View {
           <button class="btn login-btn">Registriraj se</button>
         </form>
       </div>
+      <p class="info-message"></p>
     `;
   }
 
@@ -90,18 +91,6 @@ class LoginRegisterView extends View {
         this.querySelectorAll("input").forEach((input) => (input.value = ""));
         this.querySelector("input").focus();
       });
-  }
-
-  renderError(message = "Nešto je pošlo po zlu") {
-    const errorMessageEl = this._parentElement?.querySelector(".error-message");
-    if (errorMessageEl && errorMessageEl.textContent === message) return;
-
-    if (errorMessageEl) {
-      errorMessageEl.textContent = message;
-    } else {
-      const html = `<p class="error-message">${message}</p>`;
-      this._parentElement.insertAdjacentHTML("beforeend", html);
-    }
   }
 
   addHandlerLogin(handler) {

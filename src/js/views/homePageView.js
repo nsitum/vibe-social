@@ -1,7 +1,9 @@
-class HomePageView {
+import View from "./View";
+
+class HomePageView extends View {
   _parentElement = document.querySelector(".homepage-container");
 
-  render(data) {
+  _generateMarkup() {
     this._parentElement.classList.remove("hidden");
     const html = `
       <div class="mobile-menu">
@@ -16,8 +18,9 @@ class HomePageView {
       </div>
       <div class="wall-info mobile-hidden">
       </div>
+      <p class="info-message"></p>
     `;
-    this._parentElement.insertAdjacentHTML("afterbegin", html);
+    return html;
   }
 
   hideHomePage() {

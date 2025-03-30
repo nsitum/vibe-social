@@ -8,6 +8,7 @@ import {
   TRIGGER_RERENDER,
   DEFAULT_PICTURE_URL,
   FORCE_LOGOUT,
+  ERR_MESSAGE,
 } from "./config.js";
 
 const handleToggleLoginRegister = function () {
@@ -44,15 +45,18 @@ const checkUserExists = async function (data) {
 
 const handleRegister = async function (data) {
   try {
+    // Some basic data check
     const [usernameExists, emailExists] = await checkUserExists(data);
     const isUsernameValid = usernameValid(data.username);
     const isPasswordValid = passwordValid(data.password);
-    if (usernameExists) throw new Error("Username taken!");
-    if (emailExists) throw new Error("Email taken!");
+    if (usernameExists) throw new Error("Korisničko ime zauzeto!");
+    if (emailExists) throw new Error("Email zauzet!");
     if (data.password !== data.confirmPassword)
       throw new Error("Lozinke se ne podudaraju!");
-    if (!isUsernameValid) throw new Error("Username is not valid!");
-    if (!isPasswordValid) throw new Error("Password is not valid!");
+    if (!isUsernameValid) throw new Error("Korisničko ime nije valjano!");
+    if (!isPasswordValid) throw new Error("Lozinka nije valjana!");
+
+    // Sending user over API to database
     const user = {
       username: data.username,
       email: data.email,
@@ -61,10 +65,11 @@ const handleRegister = async function (data) {
       pictureUrl: DEFAULT_PICTURE_URL,
     };
     const createdUser = await model.createNewUser(user);
-    console.log(createdUser);
+
     loginUser(createdUser);
+    homePageView.renderMessage("Uspješno kreiran korisnik!", "success");
   } catch (err) {
-    loginRegisterView.renderError(err.message);
+    loginRegisterView.renderMessage(err.message, "error");
   }
 };
 
@@ -85,12 +90,14 @@ const loginUser = function (user) {
 
 const handleLogin = async function (data) {
   try {
+    // Username and password valid check
     const isUsernameValid = usernameValid(data.username);
     const isPasswordValid = passwordValid(data.password);
-    console.log(isUsernameValid);
+
     if (!isUsernameValid) throw new Error("Korisničko ime nije valjano");
     if (!isPasswordValid) throw new Error("Lozinka nije valjana");
 
+    // Check if user already exists (if exists login the user)
     const users = await model.getUsers();
     let foundUser = false;
     users.forEach((user) => {
@@ -100,8 +107,9 @@ const handleLogin = async function (data) {
       }
     });
     if (!foundUser) throw new Error("Netočno korisničko ime ili lozinka!");
+    homePageView.renderMessage("Succesfully logged in", "success");
   } catch (err) {
-    loginRegisterView.renderError(err.message);
+    loginRegisterView.renderMessage(err.message, "error");
   }
 };
 
@@ -115,7 +123,7 @@ const handleAlreadyLoggedIn = async function () {
     loginUser(user);
     return true;
   } catch (err) {
-    console.error(err);
+    loginRegisterView.renderMessage(err.message, "error");
   }
 };
 
@@ -124,6 +132,7 @@ const handleLogout = function (forceLogout = false) {
   localStorage.clear();
   model.clearState();
   if (!forceLogout) location.reload();
+  loginRegisterView.renderMessage("Successfully logged out", "success");
 };
 
 const handleAddPost = async function (data) {
@@ -142,10 +151,11 @@ const handleAddPost = async function (data) {
       profilePicture: model.state.profilePicture,
     };
     const newPost = await model.addPost(dataObj);
-
+    if (!newPost) throw new Error("Error posting!");
     postsView.renderPost(newPost, true);
+    postsView.renderMessage("Successfully posted message", "success");
   } catch (err) {
-    console.error(err);
+    postsView.renderMessage(err.message, "error");
   }
 };
 
@@ -187,30 +197,36 @@ const renderAllPosts = async function (rerender = false) {
 };
 
 const handleEditPost = async function (postId, postEl) {
-  const postContent = postEl.querySelector(".post-content");
-  const postInfo = postEl.querySelector(".post-info");
-  const editingPost = await model.getPost(postId);
-  const newPost = { ...editingPost };
+  try {
+    const postContent = postEl.querySelector(".post-content");
+    const postInfo = postEl.querySelector(".post-info");
+    const editingPost = await model.getPost(postId);
+    const newPost = { ...editingPost };
 
-  newPost.content = postEl.querySelector(".post-input").value;
-  newPost.edited_at = new Date();
-  newPost.isEdited = true;
-  postContent.innerText = newPost.content;
-  postInfo.innerText = `Objavu uredio: ${
-    model.state.username
-  }, ${newPost.edited_at.toLocaleDateString(
-    "hr-HR"
-  )}, ${newPost.edited_at.getHours()}:${
-    newPost.edited_at.getMinutes() < 10
-      ? "0" + newPost.edited_at.getMinutes()
-      : newPost.edited_at.getMinutes()
-  }`;
+    newPost.content = postEl.querySelector(".post-input").value;
+    newPost.edited_at = new Date();
+    newPost.isEdited = true;
+    postContent.innerText = newPost.content;
+    postInfo.innerText = `Objavu uredio: ${
+      model.state.username
+    }, ${newPost.edited_at.toLocaleDateString(
+      "hr-HR"
+    )}, ${newPost.edited_at.getHours()}:${
+      newPost.edited_at.getMinutes() < 10
+        ? "0" + newPost.edited_at.getMinutes()
+        : newPost.edited_at.getMinutes()
+    }`;
 
-  await model.editPost(newPost);
-  postEl.querySelector(".create-post-container").remove();
+    const post = await model.editPost(newPost);
+    if (!post) throw new Error(ERR_MESSAGE);
+    postEl.querySelector(".create-post-container").remove();
+    postsView.renderMessage("Successfully edited post", "success");
+  } catch (err) {
+    postsView.renderMessage(err.message, "error");
+  }
 };
 
-const handleCommentPost = function (postId, postEl) {
+const handleCommentPost = async function (postId, postEl) {
   try {
     const postContent = postEl.querySelector(".post-input").value;
     if (postContent.length > 300) throw new Error("Komentar je predug!");
@@ -220,20 +236,27 @@ const handleCommentPost = function (postId, postEl) {
       user_id: model.state.id,
       likes: 0,
     };
-    model.addComment(newComment, postId);
+    const comment = await model.addComment(newComment, postId);
+    if (!comment) throw new Error(ERR_MESSAGE);
     newComment.authorUser = model.state.username;
     newComment.profilePicture = model.state.profilePicture;
     postsView.renderComment(newComment, postEl);
     postEl.querySelector(".create-comment-container").remove();
+    postsView.renderMessage("Successfully commented post", "success");
   } catch (err) {
-    console.error(err);
+    postsView.renderMessage(err.message, "error");
   }
 };
 
 const handleDeletePost = async function (postId, postEl) {
-  await model.deletePost(postId);
-  await model.deletePostComments(postId);
-  postEl.remove();
+  try {
+    const post = await model.deletePost(postId);
+    await model.deletePostComments(postId);
+    if (!post) throw new Error(ERR_MESSAGE);
+    postEl.remove();
+  } catch (err) {
+    postsView.renderMessage(err.message, "error");
+  }
 };
 
 const handleLikePost = async function (likeBtn, postId, didLike) {
@@ -342,9 +365,9 @@ const handlerChangeProfilePicture = function () {
 };
 
 const init = async function () {
+  // If user is not logged show login/register form. If user is logged in login User.
   const isLoggedIn = await handleAlreadyLoggedIn();
 
-  console.log(isLoggedIn);
   if (!isLoggedIn) {
     handleLogout(FORCE_LOGOUT);
     loginRegisterView.addHandlerRegister(handleRegister);

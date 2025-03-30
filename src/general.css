@@ -96,13 +96,6 @@ Medium: 11px
   display: none;
 }
 
-.error-message {
-  font-size: 2rem;
-  color: red;
-  font-weight: 700;
-  margin-top: 2rem;
-}
-
 .fa-solid.fa-heart {
   color: red;
 }
@@ -132,4 +125,33 @@ Medium: 11px
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* ERROR MESSAGE */
+.info-message {
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 700;
+  margin-top: 2rem;
+  background-color: #333;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s all ease-in;
+}
+
+.info-message.error-message {
+  border-left: 1rem solid red;
+}
+
+.info-message.warning-message {
+  border-left: 1rem solid yellow;
+}
+
+.info-message.success-message {
+  border-left: 1rem solid green;
 }

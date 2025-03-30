@@ -20,6 +20,7 @@ class PostsView extends View {
     </div>
     <ul class="posts">
     </ul>
+    <p class="info-message"></p>
     `;
   }
 

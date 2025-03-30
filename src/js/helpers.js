@@ -7,6 +7,8 @@ export const sendUser = async function (url, userData) {
       },
       body: JSON.stringify(userData),
     });
+    if (!res.ok) throw new Error("Something went wrong");
+
     const createdUser = await res.json();
     return createdUser;
   } catch (err) {
@@ -23,6 +25,8 @@ export const updateUserLikes = async function (url, userId, postsLiked) {
       },
       body: JSON.stringify({ postsLiked }),
     });
+    if (!res.ok) throw new Error("Something went wrong");
+
     const userLikes = await res.json();
     return userLikes;
   } catch (err) {
@@ -44,10 +48,12 @@ export const getUser = async function (url, id) {
 export const getAllUsers = async function (url) {
   try {
     const res = await fetch(url + "users");
+    if (!res.ok) throw new Error("Something went wrong");
+
     const users = res.json();
     return users;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -65,8 +71,9 @@ export const updateUser = async function (url, user) {
         ...(user.newPassword && { password: user.newPassword }),
       }),
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -79,30 +86,36 @@ export const sendPost = async function (url, data) {
       },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error("Something went wrong");
+
     const createdPost = await res.json();
     return createdPost;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
 export const getOnePost = async function (url, id) {
   try {
     const res = await fetch(url + "posts/" + id);
+    if (!res.ok) throw new Error("Something went wrong");
+
     const post = res.json();
     return post;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
 export const getAllPosts = async function (url) {
   try {
     const res = await fetch(url + "posts");
+    if (!res.ok) throw new Error("Something went wrong");
+
     const posts = res.json();
     return posts;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -115,10 +128,12 @@ export const editOnePost = async function (url, editedPost) {
       },
       body: JSON.stringify(editedPost),
     });
+    if (!res.ok) throw new Error("Something went wrong");
+
     const post = res.json();
     return post;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -130,8 +145,9 @@ export const deleteOnePost = async function (url, id) {
         "Content-Type": "Application/json",
       },
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -144,10 +160,12 @@ export const addAComment = async function (url, data) {
       },
       body: JSON.stringify(data),
     });
+    if (!res.ok) throw new Error("Something went wrong");
+
     const comment = await res.json();
     return comment;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -160,18 +178,21 @@ export const addCommentToPost = async function (url, comments, id) {
       },
       body: JSON.stringify({ comments }),
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
 export const getAllComments = async function (url) {
   try {
     const res = await fetch(url + "comments");
+    if (!res.ok) throw new Error("Something went wrong");
+
     const comments = await res.json();
     return comments;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -183,8 +204,9 @@ export const deleteComment = async function (url, id) {
         "Content-Type": "Application/json",
       },
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -197,8 +219,9 @@ export const updateCommentUser = async function (url, id, commentUser) {
       },
       body: JSON.stringify({ authorUser: commentUser }),
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -221,12 +244,13 @@ export const uploadPicture = async function (url, picture) {
       method: "POST",
       body: picture,
     });
+    if (!res.ok) throw new Error("Something went wrong");
 
     const data = await res.json();
     if (data.success) return data;
     else throw new Error("Error uploading a picture");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -241,7 +265,8 @@ export const updateUserProfilePicture = async function (url, id, pictureUrl) {
         pictureUrl,
       }),
     });
+    if (!res.ok) throw new Error("Something went wrong");
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };

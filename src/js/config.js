@@ -5,3 +5,5 @@ export const PICTURE_API_URL =
 export const DEFAULT_PICTURE_URL = "https://i.ibb.co/PZc8hcgv/defaultimage.jpg";
 export const TRIGGER_RERENDER = true;
 export const FORCE_LOGOUT = true;
+export const ERROR_TIMEOUT_MILISECONDS = 5000;
+export const ERR_MESSAGE = "Something went wrong!";
