@@ -146,6 +146,8 @@ export const deleteOnePost = async function (url, id) {
       },
     });
     if (!res.ok) throw new Error("Something went wrong");
+    const post = res.json();
+    return post;
   } catch (err) {
     throw err;
   }

@@ -142,6 +142,7 @@ Medium: 11px
   visibility: hidden;
   opacity: 0;
   transition: 0.3s all ease-in;
+  z-index: 999;
 }
 
 .info-message.error-message {

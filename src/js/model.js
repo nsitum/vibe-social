@@ -1,4 +1,9 @@
-import { API_URL, API_URL_V2, PICTURE_API_URL } from "./config.js";
+import {
+  API_URL,
+  API_URL_V2,
+  PICTURE_API_URL,
+  PICTURE_API_KEY,
+} from "./config.js";
 import {
   sendUser,
   getUser,
@@ -172,7 +177,7 @@ export const deletePost = async function (postId) {
     const post = await deleteOnePost(API_URL, postId);
     return post;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 };
 
@@ -253,7 +258,10 @@ export const fetchPostsCommentsAndUsers = async function () {
 
 export const uploadAPicture = async function (picture) {
   try {
-    const data = await uploadPicture(PICTURE_API_URL, picture);
+    const data = await uploadPicture(
+      PICTURE_API_URL + PICTURE_API_KEY,
+      picture
+    );
     return data;
   } catch (err) {
     console.error(err);

@@ -14,7 +14,6 @@ export default class View {
 
   renderMessage(message = "Nešto je pošlo po zlu", type = "error") {
     const messageEl = this._parentElement?.querySelector(".info-message");
-    console.log(messageEl);
     messageEl.classList.add(`${type}-message`);
 
     messageEl.textContent = message;
@@ -24,6 +23,7 @@ export default class View {
     setTimeout(() => {
       messageEl.style.opacity = 0;
       messageEl.style.visibility = "hidden";
+      messageEl.classList.remove(`${type}-message`);
     }, ERROR_TIMEOUT_MILISECONDS);
   }
 

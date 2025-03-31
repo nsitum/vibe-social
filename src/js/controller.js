@@ -199,23 +199,15 @@ const renderAllPosts = async function (rerender = false) {
 const handleEditPost = async function (postId, postEl) {
   try {
     const postContent = postEl.querySelector(".post-content");
-    const postInfo = postEl.querySelector(".post-info");
+    const postInfo = postEl.querySelector(".post-user-info");
     const editingPost = await model.getPost(postId);
     const newPost = { ...editingPost };
+    console.log(postId, postEl);
 
     newPost.content = postEl.querySelector(".post-input").value;
     newPost.edited_at = new Date();
     newPost.isEdited = true;
     postContent.innerText = newPost.content;
-    postInfo.innerText = `Objavu uredio: ${
-      model.state.username
-    }, ${newPost.edited_at.toLocaleDateString(
-      "hr-HR"
-    )}, ${newPost.edited_at.getHours()}:${
-      newPost.edited_at.getMinutes() < 10
-        ? "0" + newPost.edited_at.getMinutes()
-        : newPost.edited_at.getMinutes()
-    }`;
 
     const post = await model.editPost(newPost);
     if (!post) throw new Error(ERR_MESSAGE);
@@ -254,6 +246,7 @@ const handleDeletePost = async function (postId, postEl) {
     await model.deletePostComments(postId);
     if (!post) throw new Error(ERR_MESSAGE);
     postEl.remove();
+    postsView.renderMessage("Succesfully deleted post", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -333,14 +326,14 @@ const handleModifyAccount = async function (data) {
     data.id = model.state.id;
     await model.updateAUser(data);
     renderAllPosts(TRIGGER_RERENDER);
+    accountInfoView.renderMessage("Successfuly edited account", "success");
   } catch (err) {
-    accountInfoView.renderModalError(err.message);
+    accountInfoView.renderMessage(err.message, "error");
   }
 };
 
 const handleUploadPicture = async function (file) {
   try {
-    console.log(file);
     if (!file) throw new Error("Molimo prenesite sliku!");
 
     const formData = new FormData();
@@ -355,8 +348,9 @@ const handleUploadPicture = async function (file) {
     accountInfoView.setProfilePicture(profilePicture.data.url);
     accountInfoView.closeUploadPictureModal();
     renderAllPosts(TRIGGER_RERENDER);
+    accountInfoView.renderMessage("Successfully uploaded image", "success");
   } catch (err) {
-    accountInfoView.renderModalError(err.message, "picture");
+    accountInfoView.renderMessage(err.message, "error");
   }
 };
 
