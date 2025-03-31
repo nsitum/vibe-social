@@ -258,10 +258,7 @@ export const fetchPostsCommentsAndUsers = async function () {
 
 export const uploadAPicture = async function (picture) {
   try {
-    const data = await uploadPicture(
-      PICTURE_API_URL + PICTURE_API_KEY,
-      picture
-    );
+    const data = await uploadPicture(PICTURE_API_URL, picture);
     return data;
   } catch (err) {
     console.error(err);

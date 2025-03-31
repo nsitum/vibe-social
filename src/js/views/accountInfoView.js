@@ -39,7 +39,7 @@ class AccountInfoView extends View {
     modalEl.classList.add("hidden-modal");
   }
 
-  addHandlerModifyAccountModal(handler) {
+  addHandlerModifyAccountModal() {
     this._parentElement.addEventListener(
       "click",
       function (e) {
@@ -48,7 +48,6 @@ class AccountInfoView extends View {
         this.openModifyModal(
           document.querySelector(".modify-account-modal-overlay")
         );
-        handler();
       }.bind(this)
     );
   }
@@ -131,7 +130,7 @@ class AccountInfoView extends View {
     modalEl.classList.add("hidden-modal");
   }
 
-  addHandlerChangeProfilePicture(handler) {
+  addHandlerChangeProfilePicture() {
     this._parentElement.addEventListener(
       "click",
       function (e) {
@@ -140,27 +139,37 @@ class AccountInfoView extends View {
         this.openModifyModal(
           document.querySelector(".profile-picture-modal-overlay")
         );
-        handler();
       }.bind(this)
     );
   }
 
   addHandlerUploadPicture(handler) {
+    const handlerFunction = function (e) {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      const file = fileInput.files[0];
+      handler(file);
+    };
+
     document
       .querySelector(".profile-picture-btn")
-      .addEventListener("click", function (e) {
-        e.preventDefault();
-        const fileInput = document.getElementById("fileInput");
-        const file = fileInput.files[0];
-        handler(file);
-      });
+      .addEventListener("click", handlerFunction);
+  }
+
+  removeHandlerUploadPicture(handler) {
+    document
+      .querySelector(".profile-picture-btn")
+      .addEventListener("click", handler);
   }
 
   setProfilePicture(imgPath) {
     this._parentElement.querySelector(".user-profile-picture").src = imgPath;
     document.querySelector(".create-post-container .user-profile-picture").src =
       imgPath;
-    console.log(imgPath);
+  }
+
+  resetProfilePictureInput() {
+    document.getElementById("fileInput").value = "";
   }
 }
 

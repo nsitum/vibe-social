@@ -65,15 +65,6 @@ class PostsView extends View {
         : data.created_at.getMinutes()
     }`;
 
-    const info = data.isEdited
-      ? `Objavu uredio: ${data.username}, ${data.edited_at.toLocaleDateString(
-          "hr-HR"
-        )}, ${data.edited_at.getHours()}:${
-          data.edited_at.getMinutes() < 10
-            ? "0" + data.edited_at.getMinutes()
-            : data.edited_at.getMinutes()
-        }`
-      : `Objavu kreirao: ${data.username}, `;
     const html = `
       <li class="post" data-id="${data.id}">
         <div class="post-user-info">

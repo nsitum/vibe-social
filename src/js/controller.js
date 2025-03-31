@@ -78,11 +78,14 @@ const loginUser = function (user) {
   homePageView.render(model.state);
   homePageView.addHandlerToggleMobileMenu();
   accountInfoView.render(model.state);
-  accountInfoView.addHandlerChangeProfilePicture(handlerChangeProfilePicture);
+  accountInfoView.addHandlerChangeProfilePicture();
+  accountInfoView.addHandlerUploadPicture(handleUploadPicture);
   postsView.render(model.state);
   postsView.addHandlerAddPost(handleAddPost);
   accountInfoView.addHandlerLogout(handleLogout);
-  accountInfoView.addHandlerModifyAccountModal(handleOpenModifyAccount);
+  accountInfoView.addHandlerModifyAccountModal();
+  accountInfoView.setModifyAccountModalData(model.state);
+  accountInfoView.addHandlerModifyAccount(handleModifyAccount);
   loadHomePage();
   renderAllPosts();
   postsView.addHandlerPostMenu();
@@ -162,10 +165,8 @@ const handleAddPost = async function (data) {
 const renderAllPosts = async function (rerender = false) {
   postsView.clearPosts();
   postsView.showLoader();
-
   const [posts, comments, users] = await model.fetchPostsCommentsAndUsers();
   const sortedPosts = posts.sort((a, b) => a.created_at - b.created_at);
-
   sortedPosts.forEach((post) => {
     const postUser = users.find((user) => user.id === post.user_id);
     post.username = postUser.username;
@@ -202,7 +203,6 @@ const handleEditPost = async function (postId, postEl) {
     const postInfo = postEl.querySelector(".post-user-info");
     const editingPost = await model.getPost(postId);
     const newPost = { ...editingPost };
-    console.log(postId, postEl);
 
     newPost.content = postEl.querySelector(".post-input").value;
     newPost.edited_at = new Date();
@@ -285,8 +285,8 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
 };
 
 const handleOpenModifyAccount = function () {
-  accountInfoView.setModifyAccountModalData(model.state);
-  accountInfoView.addHandlerModifyAccount(handleModifyAccount);
+  // accountInfoView.setModifyAccountModalData(model.state);
+  // accountInfoView.addHandlerModifyAccount(handleModifyAccount);
 };
 
 const handleModifyAccount = async function (data) {
@@ -336,7 +336,6 @@ const handleUploadPicture = async function (file) {
   try {
     if (!file) throw new Error("Molimo prenesite sliku!");
 
-    console.log(file);
     if (file.size > 1000000) throw new Error("Datoteka je prevelika!");
     const formData = new FormData();
     formData.append("image", file);
@@ -349,15 +348,12 @@ const handleUploadPicture = async function (file) {
     );
     accountInfoView.setProfilePicture(profilePicture.data.url);
     accountInfoView.closeUploadPictureModal();
+    accountInfoView.resetProfilePictureInput();
     renderAllPosts(TRIGGER_RERENDER);
     accountInfoView.renderMessage("Successfully uploaded image", "success");
   } catch (err) {
     accountInfoView.renderMessage(err.message, "error");
   }
-};
-
-const handlerChangeProfilePicture = function () {
-  accountInfoView.addHandlerUploadPicture(handleUploadPicture);
 };
 
 const init = async function () {
