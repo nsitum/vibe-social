@@ -104,20 +104,6 @@ class AccountInfoView extends View {
     this._parentElement.querySelector(".user-username").innerText = username;
   }
 
-  // renderModalError(message = "Nešto je pošlo po zlu", modalType) {
-  //   let modalNumber = 0;
-
-  //   if (modalType === "picture") modalNumber = 1;
-
-  //   const modalEl = document.querySelectorAll(".modify-account-modal")[
-  //     modalNumber
-  //   ];
-  //   if (document.querySelector(".modal-error")) return;
-  //   const html = `<p class="modal-error">${message}</p>`;
-
-  //   modalEl.insertAdjacentHTML("beforeend", html);
-  // }
-
   openProfilePictureModal() {
     const modalEl = document.querySelector(".modify-account-modal-overlay");
     if (modalEl.classList.contains("hidden-modal"))

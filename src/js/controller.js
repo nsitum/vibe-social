@@ -110,7 +110,7 @@ const handleLogin = async function (data) {
       }
     });
     if (!foundUser) throw new Error("Netočno korisničko ime ili lozinka!");
-    homePageView.renderMessage("Succesfully logged in", "success");
+    homePageView.renderMessage("Uspješno ste prijavljeni", "success");
   } catch (err) {
     loginRegisterView.renderMessage(err.message, "error");
   }
@@ -134,8 +134,10 @@ const handleLogout = function (forceLogout = false) {
   homePageView.hideHomePage();
   localStorage.clear();
   model.clearState();
-  if (!forceLogout) location.reload();
-  loginRegisterView.renderMessage("Successfully logged out", "success");
+  if (!forceLogout) {
+    location.reload();
+    loginRegisterView.renderMessage("Uspješno ste odjavljeni", "success");
+  }
 };
 
 const handleAddPost = async function (data) {
@@ -156,7 +158,7 @@ const handleAddPost = async function (data) {
     const newPost = await model.addPost(dataObj);
     if (!newPost) throw new Error("Error posting!");
     postsView.renderPost(newPost, true);
-    postsView.renderMessage("Successfully posted message", "success");
+    postsView.renderMessage("Objava uspješna", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -212,7 +214,7 @@ const handleEditPost = async function (postId, postEl) {
     const post = await model.editPost(newPost);
     if (!post) throw new Error(ERR_MESSAGE);
     postEl.querySelector(".create-post-container").remove();
-    postsView.renderMessage("Successfully edited post", "success");
+    postsView.renderMessage("Objava uspješno uređena", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -234,7 +236,7 @@ const handleCommentPost = async function (postId, postEl) {
     newComment.profilePicture = model.state.profilePicture;
     postsView.renderComment(newComment, postEl);
     postEl.querySelector(".create-comment-container").remove();
-    postsView.renderMessage("Successfully commented post", "success");
+    postsView.renderMessage("Komentar uspješno objavljen", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -246,7 +248,7 @@ const handleDeletePost = async function (postId, postEl) {
     await model.deletePostComments(postId);
     if (!post) throw new Error(ERR_MESSAGE);
     postEl.remove();
-    postsView.renderMessage("Succesfully deleted post", "success");
+    postsView.renderMessage("Uspješno izbrisana objava", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -284,11 +286,6 @@ const handleLikePost = async function (likeBtn, postId, didLike) {
   await model.editPost(post);
 };
 
-const handleOpenModifyAccount = function () {
-  // accountInfoView.setModifyAccountModalData(model.state);
-  // accountInfoView.addHandlerModifyAccount(handleModifyAccount);
-};
-
 const handleModifyAccount = async function (data) {
   try {
     const user = await model.getOneUser(model.state.id);
@@ -301,9 +298,9 @@ const handleModifyAccount = async function (data) {
 
     if (!isUsernameValid) throw new Error("Korisničko ime nije ispravno");
     if (usernameExists && data.username !== model.state.username)
-      throw new Error("Username already exists");
+      throw new Error("Korisničko ime zauzeto!");
     if (emailExists && data.email !== model.state.email)
-      throw new Error("Email already exists");
+      throw new Error("Email zauzet!");
     if (
       data.username === model.state.username &&
       data.email === model.state.email
@@ -326,7 +323,7 @@ const handleModifyAccount = async function (data) {
     data.id = model.state.id;
     await model.updateAUser(data);
     renderAllPosts(TRIGGER_RERENDER);
-    accountInfoView.renderMessage("Successfuly edited account", "success");
+    accountInfoView.renderMessage("Uspješno izmijenjen račun", "success");
   } catch (err) {
     accountInfoView.renderMessage(err.message, "error");
   }
@@ -341,7 +338,8 @@ const handleUploadPicture = async function (file) {
     formData.append("image", file);
 
     const profilePicture = await model.uploadAPicture(formData);
-    model.state.pictureUrl = profilePicture.data.url;
+    model.state.profilePicture = profilePicture.data.url;
+    console.log(model.state);
     await model.updateAUserProfilePicture(
       model.state.id,
       profilePicture.data.url
@@ -350,7 +348,7 @@ const handleUploadPicture = async function (file) {
     accountInfoView.closeUploadPictureModal();
     accountInfoView.resetProfilePictureInput();
     renderAllPosts(TRIGGER_RERENDER);
-    accountInfoView.renderMessage("Successfully uploaded image", "success");
+    accountInfoView.renderMessage("Uspješan prijenos slike", "success");
   } catch (err) {
     accountInfoView.renderMessage(err.message, "error");
   }

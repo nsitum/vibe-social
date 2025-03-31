@@ -46,10 +46,16 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".create-post-btn");
       if (!btn) return;
+      btn.disabled = true;
+
       const data = this.querySelector(".create-post-input").value;
       if (data.length < 300)
         this.querySelector(".create-post-input").value = "";
       handler(data);
+
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 500);
     });
   }
 
@@ -140,6 +146,8 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".edit-post");
       if (!btn) return;
+      btn.disabled = true;
+
       if (btn.closest(".post").querySelector(".create-post-container")) return;
       btn.parentElement.classList.remove("show-post-menu");
       const postEl = btn.closest(".post");
@@ -159,6 +167,10 @@ class PostsView extends View {
           handler(postId, postEl);
         }
       );
+
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 500);
     });
   }
 
@@ -166,6 +178,8 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-comment");
       if (!btn) return;
+      btn.disabled = true;
+
       if (btn.closest(".post").querySelector(".create-comment-container")) {
         btn
           .closest(".post")
@@ -197,6 +211,10 @@ class PostsView extends View {
           postEl.querySelector(".comment-count").innerText++;
         }
       );
+
+      // setTimeout(() => {
+      //   btn.disabled = false;
+      // }, 500);
     });
   }
 
@@ -217,10 +235,15 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".remove-post");
       if (!btn) return;
+      btn.disabled = true;
       btn.parentElement.classList.remove("show-post-menu");
       const postEl = btn.closest(".post");
       const postId = postEl.dataset.id;
       handler(postId, postEl);
+
+      setTimeout(() => {
+        btn.disabled = false;
+      }, 500);
     });
   }
 

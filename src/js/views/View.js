@@ -20,11 +20,16 @@ export default class View {
     messageEl.style.visibility = "visible";
     messageEl.style.opacity = 1;
 
-    // setTimeout(() => {
-    //   messageEl.style.opacity = 0;
-    //   messageEl.style.visibility = "hidden";
-    //   messageEl.classList.remove(`${type}-message`);
-    // }, ERROR_TIMEOUT_MILISECONDS);
+    setTimeout(() => {
+      messageEl.style.opacity = 0;
+      messageEl.style.visibility = "hidden";
+
+      messageEl.addEventListener(
+        "transitionend",
+        () => messageEl.classList.remove(`${type}-message`),
+        { once: true }
+      );
+    }, ERROR_TIMEOUT_MILISECONDS);
   }
 
   _clear() {

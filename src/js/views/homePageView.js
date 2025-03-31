@@ -27,7 +27,7 @@ class HomePageView extends View {
     this._parentElement.innerHTML = "";
   }
 
-  addHandlerToggleMobileMenu(handler) {
+  addHandlerToggleMobileMenu() {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".mobile-item");
       if (!btn) return;
@@ -41,7 +41,6 @@ class HomePageView extends View {
       const showEl = document.querySelector(`.${btn.dataset.class}`);
       console.log(showEl);
       showEl.classList.remove("mobile-hidden");
-      handler();
     });
   }
 }
