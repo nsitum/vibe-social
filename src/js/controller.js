@@ -336,6 +336,8 @@ const handleUploadPicture = async function (file) {
   try {
     if (!file) throw new Error("Molimo prenesite sliku!");
 
+    console.log(file);
+    if (file.size > 1000000) throw new Error("Datoteka je prevelika!");
     const formData = new FormData();
     formData.append("image", file);
 
