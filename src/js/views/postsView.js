@@ -178,7 +178,6 @@ class PostsView extends View {
     this._parentElement.addEventListener("click", function (e) {
       const btn = e.target.closest(".post-comment");
       if (!btn) return;
-      btn.disabled = true;
 
       if (btn.closest(".post").querySelector(".create-comment-container")) {
         btn
@@ -207,14 +206,14 @@ class PostsView extends View {
         "click",
         function (e) {
           e.preventDefault();
+          this.disabled = true;
           handler(postId, postEl);
           postEl.querySelector(".comment-count").innerText++;
+          setTimeout(() => {
+            this.disabled = false;
+          }, 1000);
         }
       );
-
-      // setTimeout(() => {
-      //   btn.disabled = false;
-      // }, 500);
     });
   }
 
