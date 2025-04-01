@@ -107,7 +107,6 @@
     padding: 2rem 0.5rem;
     flex-direction: row;
     justify-content: space-around;
-    flex-wrap: nowrap;
   }
 
   .create-post-input-container {
@@ -126,5 +125,12 @@
 
   .custom-file-upload {
     overflow: hidden;
+  }
+
+  .user-post-picture {
+    max-width: 100%;
+    object-fit: cover; /* Ensures it fills the box properly */
+    border-radius: 50%; /* Makes it round */
+    flex-shrink: 0; /* Prevents image from shrinking */
   }
 }

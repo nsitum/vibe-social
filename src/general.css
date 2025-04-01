@@ -129,7 +129,7 @@ Medium: 11px
 
 /* ERROR MESSAGE */
 .info-message {
-  position: absolute;
+  position: fixed;
   top: 1rem;
   left: 50%;
   transform: translateX(-50%);
