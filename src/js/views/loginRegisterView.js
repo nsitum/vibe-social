@@ -88,8 +88,8 @@ class LoginRegisterView extends View {
           confirmPassword: inputs[3],
         };
         handler(data);
-        this.querySelectorAll("input").forEach((input) => (input.value = ""));
-        this.querySelector("input").focus();
+        // this.querySelectorAll("input").forEach((input) => (input.value = ""));
+        // this.querySelector("input").focus();
       });
   }
 

@@ -153,3 +153,7 @@ Medium: 11px
 .info-message.success-message {
   border-left: 1rem solid green;
 }
+
+.post-content {
+  line-height: 1.4;
+}

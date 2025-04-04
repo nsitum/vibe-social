@@ -142,7 +142,7 @@ const handleLogout = function (forceLogout = false) {
 
 const handleAddPost = async function (data) {
   try {
-    if (data.length > 300) throw new Error("Objava je preduga!");
+    if (data.length > 1000) throw new Error("Objava je preduga!");
 
     const dataObj = {
       username: model.state.username,
@@ -333,7 +333,7 @@ const handleUploadPicture = async function (file) {
   try {
     if (!file) throw new Error("Molimo prenesite sliku!");
 
-    if (file.size > 1000000) throw new Error("Datoteka je prevelika!");
+    if (file.size > 6000000) throw new Error("Datoteka je prevelika!");
     const formData = new FormData();
     formData.append("image", file);
 

@@ -49,7 +49,7 @@ class PostsView extends View {
       btn.disabled = true;
 
       const data = this.querySelector(".create-post-input").value;
-      if (data.length < 300)
+      if (data.length < 1000)
         this.querySelector(".create-post-input").value = "";
       handler(data);
 
