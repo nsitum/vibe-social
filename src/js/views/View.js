@@ -12,7 +12,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
 
-  renderMessage(message = "Nešto je pošlo po zlu", type = "error") {
+  renderMessage(message = "Something went wrong", type = "error") {
     const messageEl = this._parentElement?.querySelector(".info-message");
     messageEl.classList.add(`${type}-message`);
 

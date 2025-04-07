@@ -7,15 +7,15 @@ class PostsView extends View {
     <div class="create-post-container">
       <div class="create-post-input-container">
         <img class="user-profile-picture user-post-picture" src="${this._data.profilePicture}" alt="" />
-        <textarea class="post-input create-post-input" type="text" placeholder="Napiši objavu..."></textarea>
+        <textarea class="post-input create-post-input" type="text" placeholder="Write post..."></textarea>
       </div>
       <div class="create-post-options">
         <div class="post-options">
-          <div class="option"><i class="fa-solid fa-photo-film"></i> <span>Medijski sadržaj</span></div>
-          <div class="option"><i class="fa-solid fa-hashtag"></i> <span>Hashtagovi</span></div>
-          <div class="option"><i class="fa-solid fa-clipboard-list"></i> <span>Raspored</span></div>
+          <div class="option"><i class="fa-solid fa-photo-film"></i> <span>Media content</span></div>
+          <div class="option"><i class="fa-solid fa-hashtag"></i> <span>Hashtags</span></div>
+          <div class="option"><i class="fa-solid fa-clipboard-list"></i> <span>Schedule</span></div>
         </div>
-        <button class="post-btn create-post-btn">Kreiraj objavu</button>
+        <button class="post-btn create-post-btn">Create post</button>
       </div>
     </div>
     <ul class="posts">
@@ -49,7 +49,7 @@ class PostsView extends View {
       btn.disabled = true;
 
       const data = this.querySelector(".create-post-input").value;
-      if (data.length < 1000)
+      if (data.length < 400)
         this.querySelector(".create-post-input").value = "";
       handler(data);
 
@@ -102,8 +102,8 @@ class PostsView extends View {
             ? ` <div class="post-menu">
                   <i class="fa-solid fa-ellipsis"></i>
                   <ul class="post-menu-content .hidden-post-menu">
-                    <li class="post-option edit-post">Uredi objavu</li>
-                    <li class="post-option remove-post">Izbriši objavu</li>
+                    <li class="post-option edit-post">Edit post</li>
+                    <li class="post-option remove-post">Delete post</li>
                   </ul>
                 </div>`
             : ``
@@ -190,8 +190,8 @@ class PostsView extends View {
       const postId = postEl.dataset.id;
       const inputHTML = `
       <div class="create-comment-container">
-        <textarea class="post-input" type="text" placeholder="Napiši komentar..."></textarea>
-        <button class="post-btn edit-post-btn">Komentiraj</button>
+        <textarea class="post-input" type="text" placeholder="Write comment..."></textarea>
+        <button class="post-btn edit-post-btn">Comment</button>
       </div>
       `;
 

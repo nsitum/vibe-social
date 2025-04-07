@@ -49,12 +49,12 @@ const handleRegister = async function (data) {
     const [usernameExists, emailExists] = await checkUserExists(data);
     const isUsernameValid = usernameValid(data.username);
     const isPasswordValid = passwordValid(data.password);
-    if (usernameExists) throw new Error("Korisničko ime zauzeto!");
-    if (emailExists) throw new Error("Email zauzet!");
+    if (usernameExists) throw new Error("Username taken!");
+    if (emailExists) throw new Error("Email taken!");
     if (data.password !== data.confirmPassword)
-      throw new Error("Lozinke se ne podudaraju!");
-    if (!isUsernameValid) throw new Error("Korisničko ime nije valjano!");
-    if (!isPasswordValid) throw new Error("Lozinka nije valjana!");
+      throw new Error("Passwords don't match!");
+    if (!isUsernameValid) throw new Error("Username not valid!");
+    if (!isPasswordValid) throw new Error("Password not valid!");
 
     // Sending user over API to database
     const user = {
@@ -67,7 +67,7 @@ const handleRegister = async function (data) {
     const createdUser = await model.createNewUser(user);
 
     loginUser(createdUser);
-    homePageView.renderMessage("Uspješno kreiran korisnik!", "success");
+    homePageView.renderMessage("User successfully created!", "success");
   } catch (err) {
     loginRegisterView.renderMessage(err.message, "error");
   }
@@ -97,8 +97,8 @@ const handleLogin = async function (data) {
     const isUsernameValid = usernameValid(data.username);
     const isPasswordValid = passwordValid(data.password);
 
-    if (!isUsernameValid) throw new Error("Korisničko ime nije valjano");
-    if (!isPasswordValid) throw new Error("Lozinka nije valjana");
+    if (!isUsernameValid) throw new Error("Username not valid!");
+    if (!isPasswordValid) throw new Error("Password not valid!");
 
     // Check if user already exists (if exists login the user)
     const users = await model.getUsers();
@@ -109,8 +109,8 @@ const handleLogin = async function (data) {
         loginUser(user);
       }
     });
-    if (!foundUser) throw new Error("Netočno korisničko ime ili lozinka!");
-    homePageView.renderMessage("Uspješno ste prijavljeni", "success");
+    if (!foundUser) throw new Error("Wrong username or password!");
+    homePageView.renderMessage("Successfully signed in!", "success");
   } catch (err) {
     loginRegisterView.renderMessage(err.message, "error");
   }
@@ -136,13 +136,13 @@ const handleLogout = function (forceLogout = false) {
   model.clearState();
   if (!forceLogout) {
     location.reload();
-    loginRegisterView.renderMessage("Uspješno ste odjavljeni", "success");
+    loginRegisterView.renderMessage("Successfully logged out!", "success");
   }
 };
 
 const handleAddPost = async function (data) {
   try {
-    if (data.length > 1000) throw new Error("Objava je preduga!");
+    if (data.length > 400) throw new Error("Post is too long!");
 
     const dataObj = {
       username: model.state.username,
@@ -158,7 +158,7 @@ const handleAddPost = async function (data) {
     const newPost = await model.addPost(dataObj);
     if (!newPost) throw new Error("Error posting!");
     postsView.renderPost(newPost, true);
-    postsView.renderMessage("Objava uspješna", "success");
+    postsView.renderMessage("Successfully posted!", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -214,7 +214,7 @@ const handleEditPost = async function (postId, postEl) {
     const post = await model.editPost(newPost);
     if (!post) throw new Error(ERR_MESSAGE);
     postEl.querySelector(".create-post-container").remove();
-    postsView.renderMessage("Objava uspješno uređena", "success");
+    postsView.renderMessage("Post successfully edited", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -236,7 +236,7 @@ const handleCommentPost = async function (postId, postEl) {
     newComment.profilePicture = model.state.profilePicture;
     postsView.renderComment(newComment, postEl);
     postEl.querySelector(".create-comment-container").remove();
-    postsView.renderMessage("Komentar uspješno objavljen", "success");
+    postsView.renderMessage("Comment posted!", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -248,7 +248,7 @@ const handleDeletePost = async function (postId, postEl) {
     await model.deletePostComments(postId);
     if (!post) throw new Error(ERR_MESSAGE);
     postEl.remove();
-    postsView.renderMessage("Uspješno izbrisana objava", "success");
+    postsView.renderMessage("Post deleted!", "success");
   } catch (err) {
     postsView.renderMessage(err.message, "error");
   }
@@ -290,17 +290,17 @@ const handleModifyAccount = async function (data) {
   try {
     const user = await model.getOneUser(model.state.id);
     if (user.password !== data.oldPassword)
-      throw new Error("Stara lozinka nije točna");
+      throw new Error("Old password not correct!");
     const [usernameExists, emailExists] = await checkUserExists(data);
     const isUsernameValid = usernameValid(data.username);
     const isNewPasswordValid = passwordValid(data.newPassword);
     const isPasswordValid = passwordValid(data.oldPassword);
 
-    if (!isUsernameValid) throw new Error("Korisničko ime nije ispravno");
+    if (!isUsernameValid) throw new Error("Username not valid");
     if (usernameExists && data.username !== model.state.username)
-      throw new Error("Korisničko ime zauzeto!");
+      throw new Error("Username taken!");
     if (emailExists && data.email !== model.state.email)
-      throw new Error("Email zauzet!");
+      throw new Error("Email taken!");
     if (
       data.username === model.state.username &&
       data.email === model.state.email
@@ -309,9 +309,9 @@ const handleModifyAccount = async function (data) {
       accountInfoView.clearModifyAccountModalData();
     }
 
-    if (!isPasswordValid) throw new Error("Stara lozinka nije valjana");
+    if (!isPasswordValid) throw new Error("Old password not valid");
     if (data.newPassword.length > 0 && !isNewPasswordValid)
-      throw new Error("Nova lozinka nije valjana");
+      throw new Error("New password not valid");
 
     model.state.username = data.username;
     model.state.email = data.email;
@@ -323,7 +323,7 @@ const handleModifyAccount = async function (data) {
     data.id = model.state.id;
     await model.updateAUser(data);
     renderAllPosts(TRIGGER_RERENDER);
-    accountInfoView.renderMessage("Uspješno izmijenjen račun", "success");
+    accountInfoView.renderMessage("Successfully edited account", "success");
   } catch (err) {
     accountInfoView.renderMessage(err.message, "error");
   }
@@ -331,9 +331,9 @@ const handleModifyAccount = async function (data) {
 
 const handleUploadPicture = async function (file) {
   try {
-    if (!file) throw new Error("Molimo prenesite sliku!");
+    if (!file) throw new Error("Please add file!");
 
-    if (file.size > 6000000) throw new Error("Datoteka je prevelika!");
+    if (file.size > 6000000) throw new Error("File is too big!");
     const formData = new FormData();
     formData.append("image", file);
 
@@ -348,7 +348,7 @@ const handleUploadPicture = async function (file) {
     accountInfoView.closeUploadPictureModal();
     accountInfoView.resetProfilePictureInput();
     renderAllPosts(TRIGGER_RERENDER);
-    accountInfoView.renderMessage("Uspješan prijenos slike", "success");
+    accountInfoView.renderMessage("Successfully uploaded picture!", "success");
   } catch (err) {
     accountInfoView.renderMessage(err.message, "error");
   }

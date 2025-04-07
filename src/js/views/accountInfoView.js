@@ -12,8 +12,8 @@ class AccountInfoView extends View {
     <img class="user-profile-picture" src="${this._data.profilePicture}" alt="" />
         <p class="user-username">${this._data.username}</p>
         <div class="user-actions">
-          <button class="user-btn btn-edit"><i class="fa-solid fa-pen"></i> <span>Izmijeni račun</span></button>
-          <button class="user-btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Odjavi se</span></button>
+          <button class="user-btn btn-edit"><i class="fa-solid fa-pen"></i> <span>Modify account</span></button>
+          <button class="user-btn btn-logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></button>
         </div>
     </div>
     <p class="info-message"></p>

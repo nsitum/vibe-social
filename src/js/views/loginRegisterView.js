@@ -6,48 +6,48 @@ class LoginRegisterView extends View {
 
   _generateMarkup() {
     return `
-    <h2 class="secondary-heading">Dobrodošao u Vibe!</h2>
-      <h3 class="tertiary-heading">Prijavi se</h3>
+    <h2 class="secondary-heading">Welcome to Vibe!</h2>
+      <h3 class="tertiary-heading">Feel free to join</h3>
       <div class="login-input">
         <form class="form-login-register form-login">
           <input
             class="input username-input"
             type="text"
-            placeholder="Korisničko ime"
+            placeholder="Username"
           />
           <input
             class="input password-input"
             type="password"
-            placeholder="Lozinka"
+            placeholder="Password"
           />
           <p class="no-account">
-            Nemaš račun?
-            <a class="no-account-register" href="#">Registriraj se.</a>
+            You don't have an account?
+            <a class="no-account-register" href="#">Register.</a>
           </p>
-          <button class="btn login-btn">Prijavi se</button>
+          <button class="btn login-btn">Login</button>
         </form>
         <form class="hidden form-login-register form-register">
           <input
             class="input username-input"
             type="text"
-            placeholder="Korisničko ime (barem 3 znaka)"
+            placeholder="Username (at least 3 chars)"
           />
           <input class="input email-input" type="email" placeholder="E-mail" />
           <input
             class="input password-input"
             type="password"
-            placeholder="Lozinka (barem 8 znakova)"
+            placeholder="Password (at least 8 chars)"
           />
           <input
             class="input password-input"
             type="password"
-            placeholder="Ponovi lozinku (barem 8 znakova)"
+            placeholder="Confirm password"
           />
           <p class="no-account">
-            Već imaš račun?
-            <a class="no-account-login" href="#">Prijavi se.</a>
+            Already have account?
+            <a class="no-account-login" href="#">Login.</a>
           </p>
-          <button class="btn login-btn">Registriraj se</button>
+          <button class="btn login-btn">Register</button>
         </form>
       </div>
       <p class="info-message"></p>
