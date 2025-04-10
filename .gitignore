@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+vibe-diagram.drawio
 *.local
 
 # Editor directories and files
