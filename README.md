@@ -37,7 +37,7 @@ The project is structured following the **MVC pattern** for clear separation of 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/vibe-social.git
+git clone https://github.com/nsitum/vibe-social
 cd vibe-social
 ```
 Install dependencies:
